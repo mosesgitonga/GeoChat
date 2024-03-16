@@ -1,8 +1,8 @@
 # GeoChat
 
 ## Tables of Content
-- [Introduction][#introduction]
-- [Contributing][#contributing]
+- [Introduction](#introduction)
+- [Contributing](#contributing)
 
 ## Introduction
 Welcome to GeoChat, a web platform designed to connect online ALX students based on their geographical location.
