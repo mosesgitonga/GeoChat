@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     course: { type: String, required: true },
     cohort: { type: String, required: true },
     password: { type: String, required: true },
-    location: { type: locationSchema, required: true }
+    location: { type: locationSchema, required: true }// i called the location sub doc defined above
     
 }, { timestamps: true }) 
 
