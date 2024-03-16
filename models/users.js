@@ -7,8 +7,10 @@ const mongoose = require('mongoose')
 //location schema. it will be a subdocument in user schema
 const locationSchema = new mongoose.Schema({
     country: { type: String, required: true },
-    state: { type: String, required: true },
-    town: { type: String, required: true }
+    region: { type: String, required: true },
+    town: { type: String, required: true },
+    latitude: { type: Number, required: false, default: 0 },
+    longitude: { type: Number, required: false, default: 0 },
 }, { _id: false }) //disables auto generation of id's for this sub doc
 
 const userSchema = new mongoose.Schema({
