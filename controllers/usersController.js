@@ -49,39 +49,43 @@ class UsersController {
             }
 
             // Validate whether user is already stored in the database.
-            const user = dbClient.getUserByEmail(email)
-            if (user) {
+            const user = await dbClient.getUserByEmail(email)
+            console.log(user)
+            if (user != null) {
                 console.log('user already exists in the db')
                 res.status(200).json({ error: 'User already exists'})
                 return
-            }
-            try {
-                const newUser = await User.create({
-                    firstname,
-                    secondname,
-                    email,
-                    course,
-                    cohort,
-                    password,
-                    location: {
-                        country,
-                        region,
-                        town,
-                        latitude,
-                        longitude
-                    }
-                });
-                res.status(201).json({ Success: `created new User ${newUser}`})
-            } catch(error) {
-                console.log('Error: Unable to create user')
-                res.status(500).json({ error: 'internal server error' })
+            } else {
+                try {
+                    const newUser = await User.create({
+                        firstname,
+                        secondname,
+                        email,
+                        course,
+                        cohort,
+                        password,
+                        location: {
+                            country,
+                            region,
+                            town,
+                            latitude,
+                            longitude
+                        }
+                    });
+                    res.status(201).json({ Success: `created new User ${newUser}`})
+                } catch(error) {
+                    console.log('Error: Unable to create user')
+                    res.status(500).json({ error: 'internal server error' })
+                }
             }
             
-    } catch(error) {
-        console.log(error)
+        } catch(error) {
+            console.log(error)
 
+        }
     }
-    }
+
+    static async listAllUsers(req, res) {}
 }
 
 module.exports = UsersController;

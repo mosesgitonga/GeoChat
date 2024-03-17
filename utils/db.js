@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const User = require('../models/users')
-
 /**
  * Interacts with db
  * 
@@ -20,8 +19,13 @@ class DbClient {
         if (!email) {
             console.log('no email passed')
         }
-        const user = await User.findOne({ email })
-        return user
+        try {
+            const user = await User.findOne({ email: email })
+            return user
+        } catch(error) {
+            console.error(error)
+
+        }
    }
 }
 
