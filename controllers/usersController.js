@@ -1,4 +1,7 @@
 const User = require('../models/users')
+const DbClient = require('../utils/db')
+
+const dbClient = new DbClient();
 
 class UsersController {
     static async createUser(req, res) {
@@ -38,16 +41,20 @@ class UsersController {
                 res.status(400).json({ error: 'Country, region or town missing'})
                 return
             }
-            
+
             if (!longitude || !latitude) {
                 //it should not return anything because the latitude longitude are not mandatory
                 //this is because the user might not allow us to access his/her location through the api
                 console.log('did not recieve the longitude and latitude from google maps api')
             }
 
-            // TODO: Validate whether user is already stored in the database.
-            // This is after the database connection have been created.
-
+            // Validate whether user is already stored in the database.
+            const user = dbClient.getUserByEmail(email)
+            if (user) {
+                console.log('user already exists in the db')
+                res.status(200).json({ error: 'User already exists'})
+                return
+            }
             try {
                 const newUser = await User.create({
                     firstname,
@@ -71,8 +78,7 @@ class UsersController {
             }
             
     } catch(error) {
-        console.log(req.body)
-        //console.log(error)
+        console.log(error)
 
     }
     }
