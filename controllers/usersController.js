@@ -68,6 +68,7 @@ class UsersController {
                 console.log('Error: Unable to create user')
                 res.status(500).json({ error: 'internal server error' })
             }
+            
     } catch(error) {
         console.log(req.body)
         //console.log(error)
