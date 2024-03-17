@@ -20,7 +20,7 @@ class DbClient {
             console.log('no email passed')
         }
         try {
-            const user = await User.findOne({ email: email })
+            const user = await User.findOne({ email })
             return user
         } catch(error) {
             console.error(error)
