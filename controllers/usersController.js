@@ -38,6 +38,7 @@ class UsersController {
                 res.status(400).json({ error: 'Country, region or town missing'})
                 return
             }
+            
             if (!longitude || !latitude) {
                 //it should not return anything because the latitude longitude are not mandatory
                 //this is because the user might not allow us to access his/her location through the api
