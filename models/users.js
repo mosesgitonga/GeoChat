@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
     secondname: { type: String, required: true },
     course: { type: String, required: true },
     cohort: { type: String, required: true },
+    email : { type: String, required: true },
     password: { type: String, required: true },
     location: { type: locationSchema, required: true }// i called the location sub doc defined above
     
@@ -25,4 +26,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-export default User;
+module.exports = User;
