@@ -1,6 +1,5 @@
 const Message = require('../models/messages');
 const socketIO = require('socket.io');
-const { ObjectId } = require('mongoose').Types;
 
 // Ensure that you have Socket.io properly configured and initialized with your HTTP server (httpServer) to enable WebSocket communication.
 // Initialize Socket.io with the HTTP server
@@ -11,19 +10,19 @@ class MessageController {
   static io;
 
   // Initialize the controller with the HTTP server instance
-  static init(httpServer) {
+  static init(server) {
     // Create a static instance of the io object
-    MessageController.io = socketIO(httpServer);
+    MessageController.io = socketIO(server);
 
     // WebSocket event handling
-    MessageController.io.on('connection', (socket) => {
-      console.log('A user connected');
+    // MessageController.io.on('connection', (socket) => {
+    // console.log('A user connected');
 
       // Handle disconnect event
-      socket.on('disconnect', () => {
-        console.log('User disconnected');
-      });
-    });
+     // socket.on('disconnect', () => {
+      // console.log('User disconnected');
+      //});
+    //});
   }
 
   //POST request to create new message betweem two users
@@ -42,13 +41,11 @@ class MessageController {
        if (!content) {
         return res.status(400).json({ error: 'Content field is required' });
       }
-      const senderObjectId = new ObjectId(sender);
-      const receiverObjectId = new ObjectId(receiver);
 
       // Create a new message
       const newMessage = new Message({
-        sender: senderObjectId,
-        receiver: receiverObjectId,
+        sender,
+        receiver,
         content
       });
 
@@ -57,15 +54,73 @@ class MessageController {
 
       // Emit the new message to WebSocket clients
       if (MessageController.io) {
-  MessageController.io.to(room).emit('message', newMessage);
-} else {
-  console.error('Socket.IO is not properly initialized');
-}
+        MessageController.io.emit('message', newMessage);
+      } else {
+        console.error('Socket.IO is not properly initialized');
+      }
 
       res.status(201).json({ message: 'Message created successfully', data: newMessage });
     } catch (error) {
-    console.error('Error creating message:', error);
-    res.status(500).json({ error: 'Internal server error' });
+      console.error('Error creating message:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+  
+  // GET request to retrieve messages by user ID
+  static async getMessagesByUserID(req, res) {
+    try {
+      const userID = req.params.userID;
+
+      const messages = await Message.find({
+        $or: [{ sender: userID }, { receiver: userID }],
+      }).exec();
+
+      res.status(200).json({ messages });
+    } catch (error) {
+      console.error('Error retrieving messages:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  } 
+
+
+  static async getMessagesBetweenUsers(req, res) {
+    try {
+      const authenticatedUserID = req.user.id; // Assuming you store user ID in the req.user object after authentication
+      const targetUserID = req.params.userID;
+
+      // Query the database to find messages between the authenticated user and the specified user
+      const messages = await Message.find({
+        $or: [
+          { sender: authenticatedUserID, receiver: targetUserID },
+          { sender: targetUserID, receiver: authenticatedUserID },
+        ],
+      }).exec();
+
+      res.status(200).json({ messages });
+    } catch (error) {
+      console.error('Error retrieving messages:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+
+
+  static async deleteMessage(req, res) {
+    try {
+      const messageID = req.params.messageID;
+
+      // Find the message by ID and delete it
+      const deletedMessage = await Message.findByIdAndDelete(messageID);
+
+      if (!deletedMessage) {
+        return res.status(404).json({ error: 'Message not found' });
+      }
+
+      // Respond with a success message
+      res.status(200).json({ message: 'Message deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting message:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
