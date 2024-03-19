@@ -3,7 +3,7 @@ const DbClient = require('./utils/db.js');
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
-// const MessageController = require('./controllers/messageController');
+const MessageController = require('./controllers/messageController');
 
 const dbClient = new DbClient;
 
@@ -19,7 +19,7 @@ const server = http.createServer(app);
 
 const io = socketIO(server);
 
-// MessageController.init(server);
+MessageController.init(server);
 
 // WebSocket event handling
 io.on('connection', (socket) => {
