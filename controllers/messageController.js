@@ -56,7 +56,11 @@ class MessageController {
       await newMessage.save();
 
       // Emit the new message to WebSocket clients
-      MessageController.io.emit('message', newMessage);
+      if (MessageController.io) {
+  MessageController.io.to(room).emit('message', newMessage);
+} else {
+  console.error('Socket.IO is not properly initialized');
+}
 
       res.status(201).json({ message: 'Message created successfully', data: newMessage });
     } catch (error) {

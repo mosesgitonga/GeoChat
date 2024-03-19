@@ -7,18 +7,18 @@ const MessageController = require('./controllers/messageController');
 
 const dbClient = new DbClient;
 
-const app = express()
+const app = express();
 app.use(express.json());
 
-app.use('/api', injectRoutes())
+app.use('/api', injectRoutes());
 
-
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
-
 const io = socketIO(server);
 
+
+// Initialize MessageController with the HTTP server instance
 MessageController.init(server);
 
 // WebSocket event handling
@@ -32,7 +32,7 @@ io.on('connection', (socket) => {
 });
 
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
+  console.log(`Server is running on port ${PORT}`);
 });
 
 module.exports = server;
