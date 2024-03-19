@@ -7,15 +7,20 @@ const messageSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  content: {
-    type: string,
+  receiver: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
   },
-  room: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Room',
-    require: true,
+  content: {
+    type: String,
+    required: true,
   },
+  // room: {
+  // type: mongoose.Schema.Types.ObjectId,
+  // ref: 'Room',
+  // require: true,
+  // },
   timestamp: {
     type: Date,
     default: Date.now
@@ -24,4 +29,5 @@ const messageSchema = new mongoose.Schema({
 
 // Create and export the Message model
 const Message = mongoose.model('Message', messageSchema);
-export default Message;
+
+module.exports = Message;
