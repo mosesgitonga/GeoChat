@@ -3,7 +3,7 @@ const DbClient = require('./utils/db.js');
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
-const { init: initMessageController } = require('./controllers/messageController');
+// const MessageController = require('./controllers/messageController');
 
 const dbClient = new DbClient;
 
@@ -15,11 +15,11 @@ app.use('/api', injectRoutes())
 
 const PORT = process.env.PORT || 3000
 
-const httpServer = http.createServer(app);
+const server = http.createServer(app);
 
-const io = socketIO(httpServer);
+const io = socketIO(server);
 
-initMessageController(httpServer);
+// MessageController.init(server);
 
 // WebSocket event handling
 io.on('connection', (socket) => {
@@ -31,8 +31,8 @@ io.on('connection', (socket) => {
   });
 });
 
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
-})
+});
 
-module.exports = server
+module.exports = server;
