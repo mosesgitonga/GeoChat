@@ -1,0 +1,51 @@
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
+// Function to generate JWT token
+function generateToken(user) {
+  const payload = {
+    userId: user._id,
+    email: user.email,
+    // Add any additional user data to the payload if needed
+  };
+  const options = {
+    expiresIn: '1h', // Token expiration time
+  };
+  return jwt.sign(payload, process.env.JWT_SECRET, options);
+}
+
+// Function to verify JWT token
+function verifyToken(token) {
+  return jwt.verify(token, process.env.JWT_SECRET);
+}
+
+// Middleware to authenticate user using JWT token
+async function authenticate(req, res, next) {
+  try {
+    const token = req.headers.authorization.split(' ')[1]; // Extract token from Authorization header
+    const decodedToken = verifyToken(token); // Verify and decode the token
+    req.userData = decodedToken; // Attach user data to request object
+    next(); // Continue to the next middleware
+  } catch (error) {
+    return res.status(401).json({ message: 'Authentication failed' });
+  }
+}
+
+// Controller function to handle user login
+async function login(req, res) {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user || !user.isValidPassword(password)) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = generateToken(user);
+    return res.status(200).json({ token });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+module.exports = { authenticate, login };
