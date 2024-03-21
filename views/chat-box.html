@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #messageForm {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        #messageForm input[type="text"] {
+            flex: 1;
+            margin-right: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        #messageForm button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #messageForm button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="messageForm">
+            <input type="text" id="roomId" placeholder="Room ID">
+            <input type="text" id="message" placeholder="Message">
+            <button type="submit">Send</button>
+        </form>
+        <div id="messageDisplay"></div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+
+        const messageForm = document.getElementById('messageForm');
+        const messageInput = document.getElementById('message');
+        const roomIdInput = document.getElementById('roomId');
+        const messageDisplay = document.getElementById('messageDisplay');
+
+        messageForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const roomId = roomIdInput.value.trim();
+            const message = messageInput.value.trim();
+            if (!roomId || !message) {
+                return;
+            }
+            socket.emit('chat message', { roomId, message });
+            messageInput.value = '';
+        });
+
+        socket.on('chat message', (data) => {
+            const { roomId, message } = data;
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `Room ID: ${roomId} - Message: ${message}`;
+            messageDisplay.appendChild(messageElement);
+        });
+    </script>
+</body>
+</html>
