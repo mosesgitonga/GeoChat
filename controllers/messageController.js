@@ -1,51 +1,62 @@
-const Message = require('../models/message');
+const Message = require('../models/messages');
+const { Server } = require('socket.io')
+const { createServer } = require('http')
 
-// Controller for handling message-related operations
+const httpServer = createServer()
+const io = new Server(httpServer)
+
 class MessageController {
-  // GET request to retrieve messages from a specific chat room by room ID
-  static async getMessagesByRoom(req, res) {
-    try {
-      const roomId = req.params.roomId;
-      const messages = await Message.find({ room: roomId }).populate('sender', 'username');
-      res.json(messages);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to retrieve messages' });
-    }
-  }
+  constructor() {
+    io.on('connection', (socket) => {
+      console.log('A new user connected')
 
-  // POST request to send a new message to a specific chat room
-  static async sendMessage(req, res) {
-    try {	    
-      const { sender, content, room } = req.body;
-      const newMessage = await Message.create({ sender, content, room });
-      res.status(201).json(newMessage);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to send message' });
-    }
-  }
+      socket.on('error', (error) => {
+        console.log('Socket error', error)
+      })
 
-  // PUT request to update a message by message ID
-  static async updateMessageById(req, res) {
-    try {
-      const messageId = req.params.messageId;
-      const updatedContent = req.body.content;
-      const updatedMessage = await Message.findByIdAndUpdate(messageId, { content: updatedContent }, { new: true });
-      res.json(updatedMessage);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to update message' });
-    }
-  }
+      socket.on('disconnect', () => {
+        console.log('User disconnected')
+      })
 
-  // DELETE request to delete a message by message ID
-  static async deleteMessageById(req, res) {
+    })
+
+    httpServer.listen(3001, () => {
+      console.log('Socket server is running on port 3001')
+    })
+  }   
+   
+  //send message
+  async sendMessage(req, res) {
+    if (!req.body) {
+      console.log('Missing parameters')
+      res.status(400).json({ error: 'Missing parameters'})
+      return
+    }
+    const { roomId, message } = req.body
+    if (!roomId) {
+      console.log('roomid is missing in req.body')
+      res.status(400).json({ error: 'Missing roomId'})
+      return
+    }
+    if (!message) {
+      console.log('message is missing in the body')
+      res.status(400).json({ error: 'missing message to send'})
+      return
+    }
     try {
-      const messageId = req.params.messageId;
-      await Message.findByIdAndDelete(messageId);
-      res.json({ message: 'Message deleted successfully' });
-    } catch (error) {
-     res.status(500).json({ error: 'Failed to delete message' });
+      
+      const sent = io.emit(roomId, message)
+      if (sent) {
+        console.log(sent)
+      }
+      
+      res.status(200).json({ success: 'message sent successfully'})
+    } catch(error) {
+      console.log('error while sending message', error)
+      res.status(500).json({ error: 'internal server error'})
+
     }
   }
 }
 
-module.exports = messageController;
+module.exports = MessageController

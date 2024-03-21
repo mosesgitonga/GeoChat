@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Define the schema for the Message model
 const messageSchema = new mongoose.Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
@@ -8,13 +7,13 @@ const messageSchema = new mongoose.Schema({
     required: true,
   },
   content: {
-    type: string,
+    type: String,
     required: true,
   },
   room: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Room',
-    require: true,
+    required: true,
   },
   timestamp: {
     type: Date,
@@ -24,4 +23,4 @@ const messageSchema = new mongoose.Schema({
 
 // Create and export the Message model
 const Message = mongoose.model('Message', messageSchema);
-export default Message;
+module.exports = Message
