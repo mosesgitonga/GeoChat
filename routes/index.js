@@ -1,4 +1,3 @@
-const express = require('express')
 const UsersController = require('../controllers/usersController')
 const AuthController = require('../controllers/authController')
 const authenticateToken = require('../middleware/authenticateToken')
@@ -7,10 +6,10 @@ const FileService = require('../services/fileService')
 const MessageController = require('../controllers/messageController')
 const RoomController = require('../controllers/roomController')
 const { join } = require('node:path')
+const express = require('express');
 
 const fileController = new FileController();
 const fileService = new FileService()
-
 
 //multer configurationds
 //const storage = multer.memoryStorage()
@@ -26,7 +25,6 @@ const injectRoutes = () => {
     router.post('/logout',authenticateToken, async (req, res) => await AuthController.logout(req, res))
     router.post('/upload', fileController.handleImageUpload.bind(fileController));
     router.delete('/user/image', fileService.deleteProfileImage)
-    router.post('/send-message', MessageController.sendMessage)
     
     router.get('/inbox', (req, res) => {
       res.sendFile(join(__dirname, '../views/chat-box.html'))

@@ -74,6 +74,12 @@ class UsersController {
             }
             
             // Validate whether user is already stored in the database.
+            const ExistingUser = await dbClient.getUserByUsername(username)
+            if (ExistingUser) {
+                console.log('User already exists in the db')
+                res.status(200).json({ error: 'User already exists' })
+                return
+            }
             const user = await dbClient.getUserByEmail(email)
             if (user) {
                 console.log('user already exists in the db')

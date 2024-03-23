@@ -3,26 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Application</title>
+  <title></title>
 </head>
 <body>
-  <form id="messageForm">
+    <form id="messageForm">
     <input type="text" id="roomIdInput" placeholder="Room ID">
     <input type="text" id="messageInput" placeholder="Message">
     <button type="submit">Send</button>
   </form>
+  <ul id="thread"></ul>
 
-  <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> 
   <script>
+    function getCookie(name) {
+      const cookies = document.cookie.split(';');
+      for (const cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName.trim() === name) {
+          return decodeURIComponent(cookieValue);
+        }
+      }
+      return null;
+    }
+    
+    const email = getCookie('email')
+    if (!email) {
+      console.log('no email cookie is present')
+    }
+    console.log(email)
     // Connect to the Socket.io server
-    const socket = io('http://localhost:3001');
-
-    socket.on('connect', () => {
-        console.log('Connected to server');
+    const socket = io({
+      query: {
+        email: email
+      }
     });
 
-    socket.on('disconnect', () => {
-        console.log('Disconnected from server');
+    const form = document.getElementById('messageForm');
+    const input = document.getElementById('messageInput');
+    const thread = document.getElementById('thread');
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const roomId = document.getElementById('roomIdInput').value;
+      const message = input.value;
+
+      // Send the message to the server
+      socket.emit('message', { roomId, message });
+
+      input.value = '';
+    });
+
+    socket.on('message', (data) => {
+      const message = document.createElement('li');
+      console.log(data.message)
+      message.textContent = data.message;
+      thread.appendChild(message);
     });
   </script>
 </body>

@@ -28,7 +28,7 @@ class DbClient {
         }
    }
    async getUserByUsername(username) {
-        if (!email) {
+        if (!username) {
             console.log('no username passed')
         }
         try {
