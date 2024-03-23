@@ -11,7 +11,7 @@ const setAccessTokenCookie = (res, token, email) => {
     const options = {
         httpOnly: true,
         sameSite: 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000
+        maxAge: 7 * 24 * 60 * 60 * 1000 //1 week
         }
 
     res.cookie('accessToken', token, options)
@@ -51,7 +51,8 @@ class AuthController {
             const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET_TOKEN, {expiresIn: '1w'})
 
             setAccessTokenCookie(res, accessToken, user.email)
-            return res.status(200).json({ accessToken: accessToken })
+            console.log('The user made it to the homepage')
+            res.status(200).json('login is successful')         
         } catch(error) {
             console.error(error)
             res.status(500).json({ error: 'internal server error' })

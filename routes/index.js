@@ -5,6 +5,7 @@ const FileController = require('../controllers/fileController')
 const FileService = require('../services/fileService')
 const MessageController = require('../controllers/messageController')
 const RoomController = require('../controllers/roomController')
+const { getAllUsers } = require('../services/homepage')
 const { join } = require('node:path')
 const express = require('express');
 
@@ -24,8 +25,11 @@ const injectRoutes = () => {
       });
     router.post('/logout',authenticateToken, async (req, res) => await AuthController.logout(req, res))
     router.post('/upload', fileController.handleImageUpload.bind(fileController));
+
     router.delete('/user/image', fileService.deleteProfileImage)
-    
+    router.get('/homepage', (req, res) => {
+      res.sendFile(join(__dirname, '../views/homepage.html'))
+    })
     router.get('/inbox', (req, res) => {
       res.sendFile(join(__dirname, '../views/chat-box.html'))
     })

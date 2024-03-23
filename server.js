@@ -7,17 +7,18 @@ const { join } = require('path');
 const { Server } = require('socket.io');
 const { getUser } = require('./services/socketServices.js')
 
-//const dbClient = new DbClient;
+const dbClient = new DbClient();
 
 const app = express()
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static('views'));
 
 app.use('/api', injectRoutes())
 const server = createServer(app);
 const io = new Server(server)  // socket.io server
 
-app.get('/', (req, res) => {
+app.get('/inbox', (req, res) => {
     res.sendFile(join(__dirname, './views/chat-box.html'))
 })
 //
@@ -27,7 +28,17 @@ socketIdMapWithUserId = new Map()
 io.on('connection', async (socket) => {
     console.log('user connected', socket.id)
     try {
-    user = await getUser(socket)
+    console.log(socket.handshake.query)
+    const email = socket.handshake.query.email
+    console.log(socket.id)
+    if (email === 'null') { //am using null as a str coz the frontend will return it as string
+        console.log('no email found, probably because no cookie was found')
+        console.log(email)
+    }
+
+    console.log(email)  
+    const user = await dbClient.getUserByEmail(email)
+    
     socketIdMapWithUserId.set(user.id, socket.id)
     } catch(error) {
         console.log(error)
