@@ -126,8 +126,49 @@ class UsersController {
         }
     }
 
-    static async listAllUsers(req, res) {}
+    static async getSpecificUser(req, res) {
+        const username = req.params.username
+        if (!username) {
+            console.log('No username provided in the parameters')
+            res.status(400).json({ error: 'no username provided in the parameters' })
+            return
+        }
+        if (!username) {
+            console.log('no username in the parameters')
+        }
+        try {
+            const user = await dbClient.getUserByUsername(username)
+            console.log(user)
+            if (!user) {
+                console.log('unable to fetch the user')
+                res.status(400).json({ error: `Unable to fetch the user ${username}`})
+                return
+            }
+
+            res.status(200).json({ user: user})
+        } catch(error) {
+            console.log(error)
+            res.status(500).json({ error: 'Internal server error'})
+    
+        }
+    }
+
+    static async listAllUsers(req, res) {
+        try {
+            const allUsers = await dbClient.getUsersBy()
+            if (!allUsers) {
+                console.log('unable to get users')
+            } else {
+                res.status(200).json({ users: allUsers })
+            }
+        } catch(error) {
+            console.log(error)
+            res.status(500).json({ error: 'Internal server error'})
+        }
+        
+    }
 }
+
 
 module.exports = UsersController;
 

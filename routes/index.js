@@ -33,7 +33,8 @@ const injectRoutes = () => {
     router.get('/inbox', (req, res) => {
       res.sendFile(join(__dirname, '../views/chat-box.html'))
     })
-    
+    router.get('/users/all', UsersController.listAllUsers)
+    router.get('/profile/:username', UsersController.getSpecificUser)
 
     //rooms
     router.post('/room', RoomController.createRoom)

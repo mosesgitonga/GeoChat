@@ -28,9 +28,8 @@ socketIdMapWithUserId = new Map()
 io.on('connection', async (socket) => {
     console.log('user connected', socket.id)
     try {
-    console.log(socket.handshake.query)
     const email = socket.handshake.query.email
-    console.log(socket.id)
+
     if (email === 'null') { //am using null as a str coz the frontend will return it as string
         console.log('no email found, probably because no cookie was found')
         console.log(email)
@@ -39,7 +38,7 @@ io.on('connection', async (socket) => {
     console.log(email)  
     const user = await dbClient.getUserByEmail(email)
     
-    socketIdMapWithUserId.set(user.id, socket.id)
+    socketIdMapWithUserId.set(socket.id, user.id)
     } catch(error) {
         console.log(error)
     }
@@ -50,7 +49,14 @@ io.on('connection', async (socket) => {
  
     socket.on('disconnect', () => {
         console.log('user disconnected')
-        socketIdMapWithUserId.delete(user.id, socket.id)
+        const userId = socketIdMapWithUserId.get(socket.id)
+        
+        if (userId) {
+            socketIdMapWithUserId.delete(socket.id)
+            console.log(`removed socket ${socket.id} from map`)
+        } else {
+            console.log(`userid not found for socket ${socket.id}`)
+        }
     })
 
     socket.on('message', (data) => {
