@@ -1,18 +1,20 @@
-const injectRoutes = require('./routes/index.js')
+const injectRoutes = require('./routes/index.js');
 const DbClient = require('./utils/db.js');
-const express = require('express')
+const express = require('express');
 
 const dbClient = new DbClient;
 
-const app = express()
+const app = express();
 app.use(express.json());
 
-app.use('/api', injectRoutes())
+const router = injectRoutes(); // Call injectRoutes to get the router instance
 
+app.use('/api', router); // Use the router for '/api' routes
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
-})
+    console.log(`Server is running on port ${PORT}`);
+});
 
-module.exports = server
+module.exports = server;
+

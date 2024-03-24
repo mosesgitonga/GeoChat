@@ -1,17 +1,23 @@
 const mongoose = require('mongoose');
-const User = require('../models/users');
-
-const DB_HOST = process.env.HOST || 'localhost';
-const DB_PORT = process.env.PORT || 27017;
-const DB_NAME = process.env.DB_NAME || 'GeoChatDB';
-
-const uri = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+const User = require('../models/users'); // Assuming you have a User model defined
 
 class DbClient {
     constructor() {
-        mongoose.connect(uri)
-            .then(() => console.log(`Connected to MongoDB on port ${DB_PORT}`))
-            .catch((error) => console.error(`Error connecting to MongoDB`, error));
+        this.connect();
+    }
+
+    async connect() {
+        try {
+            await mongoose.connect('mongodb://localhost:27017/GeoChatDB', {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                useCreateIndex: true,
+                useFindAndModify: false
+            });
+            console.log('Connected to MongoDB');
+        } catch (error) {
+            console.error('Error connecting to MongoDB:', error);
+        }
     }
 
     async getUserByEmail(email) {
@@ -19,39 +25,16 @@ class DbClient {
             const user = await User.findOne({ email });
             return user;
         } catch (error) {
-            console.error(error);
+            console.error('Error fetching user by email:', error);
             throw new Error('Error fetching user by email');
         }
     }
 
-    async getUsersByCountry(country) {
-        try {
-            const users = await User.find({ 'location.country': country });
-            return users;
-        } catch (error) {
-            console.error(error);
-            throw new Error('Error fetching users by country');
-        }
-    }
+    // Add more methods here to interact with your database
 
-    async getUsersByCountryAndRegion(country, region) {
-        try {
-            const users = await User.find({ 'location.country': country, 'location.region': region });
-            return users;
-        } catch (error) {
-            console.error(error);
-            throw new Error('Error fetching users by country and region');
-        }
-    }
-
-    async getUsersByCountryRegionAndTown(country, region, town) {
-        try {
-            const users = await User.find({ 'location.country': country, 'location.region': region, 'location.town': town });
-            return users;
-        } catch (error) {
-            console.error(error);
-            throw new Error('Error fetching users by country, region, and town');
-        }
+    async close() {
+        await mongoose.disconnect();
+        console.log('Disconnected from MongoDB');
     }
 }
 
