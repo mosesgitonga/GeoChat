@@ -1,28 +1,36 @@
 const Message = require('../models/messages');
 const socketIO = require('socket.io');
+const express = require('express');
+const { Server } = require('socket.io');
+const { createServer } = require('http');
+const path = require('path');
 
-// Ensure that you have Socket.io properly configured and initialized with your HTTP server (httpServer) to enable WebSocket communication.
-// Initialize Socket.io with the HTTP server
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+  }
+});
 
+// Middleware function to log when a user accesses a specific URL
+app.use('/inbox', (req, res, next) => {
+  console.log('User accessed /inbox URL');
+  next();
+});
 
-// Controller for handling message-related operations
+app.use(express.static(path.join(__dirname, '../views')));
+
 class MessageController {
-  static io;
-
-  // Initialize the controller with the HTTP server instance
-  static init(server) {
-    // Create a static instance of the io object
-    MessageController.io = socketIO(server);
-
-    // WebSocket event handling
-    // MessageController.io.on('connection', (socket) => {
-    // console.log('A user connected');
-
-      // Handle disconnect event
-     // socket.on('disconnect', () => {
-      // console.log('User disconnected');
-      //});
-    //});
+  constructor() {
+    httpServer.listen(3001);
+    io.on('connection', (socket) => {
+      console.log('a user connected');
+      socket.on('disconnect', () => {
+        console.log('user disconnected');
+      });
+    });
+    console.log('socket server started on port 3001');
   }
 
   //POST request to create new message betweem two users
@@ -147,29 +155,6 @@ class MessageController {
       res.status(201).json(newMessage);
     } catch (error) {
       res.status(500).json({ error: 'Failed to send message' });
-    }
-  }
-
-  // PUT request to update a message by message ID
-  static async updateMessageById(req, res) {
-    try {
-      const messageId = req.params.messageId;
-      const updatedContent = req.body.content;
-      const updatedMessage = await Message.findByIdAndUpdate(messageId, { content: updatedContent }, { new: true });
-      res.json(updatedMessage);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to update message' });
-    }
-  }
-
-  // DELETE request to delete a message by message ID
-  static async deleteMessageById(req, res) {
-    try {
-      const messageId = req.params.messageId;
-      await Message.findByIdAndDelete(messageId);
-      res.json({ message: 'Message deleted successfully' });
-    } catch (error) {
-     res.status(500).json({ error: 'Failed to delete message' });
     }
   }
 }

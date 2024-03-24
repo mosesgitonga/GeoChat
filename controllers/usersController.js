@@ -1,12 +1,26 @@
 const User = require('../models/users')
 const DbClient = require('../utils/db')
-
+const bcrypt = require('bcrypt')
 const dbClient = new DbClient();
+require('dotenv').config();
+
+
+const setAccessTokenCookie = (res, token, email) => {
+    const options = {
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    }
+
+    res.cookie('accessToken', token, options)
+    res.cookie('email', email, options)
+}
 
 class UsersController {
     static async createUser(req, res) {
         try {
-            const { firstname, secondname, username, email, course, cohort, password, imagePath, location} = req.body
+            const { firstname, secondname, username, email, course, cohort, imagePath, location} = req.body
+            let { password } = req.body
 
             if (!req.body || Object.keys(req.body).length === 0) {
                 return res.status(400).json({ error: 'Request body is missing or empty' });
@@ -58,15 +72,26 @@ class UsersController {
                 //this is because the user might not allow us to access his/her location through the api
                 console.log('did not recieve the longitude and latitude from google maps api')
             }
-
+            
             // Validate whether user is already stored in the database.
+            const ExistingUser = await dbClient.getUserByUsername(username)
+            if (ExistingUser) {
+                console.log('User already exists in the db')
+                res.status(200).json({ error: 'User already exists' })
+                return
+            }
             const user = await dbClient.getUserByEmail(email)
-            if (user != null) {
+            if (user) {
                 console.log('user already exists in the db')
                 res.status(200).json({ error: 'User already exists'})
                 return
             } else {
                 try {
+                    //hash password
+                    const saltRounds = 10
+                    const hashPassword = await bcrypt.hash(password, saltRounds)
+                    password = hashPassword
+
                     const newUser = await User.create({
                         username,
                         firstname,
@@ -84,6 +109,10 @@ class UsersController {
                             longitude
                         }
                     });
+
+                    if (newUser) {
+
+                    }
                     res.status(201).json({ Success: `created new User ${newUser}`})
                 } catch(error) {
                     console.log('Error: Unable to create user', error)

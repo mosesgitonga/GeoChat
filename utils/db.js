@@ -20,13 +20,54 @@ class DbClient {
             console.log('no email passed')
         }
         try {
-            const user = await User.findOne({ email })
+            const user = await User.findOne({ email: email }); 
             return user
         } catch(error) {
             console.error(error)
 
         }
    }
+   async getUserByUsername(username) {
+        if (!username) {
+            console.log('no username passed')
+        }
+        try {
+            const user = await User.findOne({ username: username }); 
+            return user
+        } catch(error) {
+            console.error(error)
+
+        }
+    }
+
+    async saveFilePath(email, path) {
+        try {
+            const user = await User.findOneAndUpdate(
+                {email: email},
+                { $set: {imagePath: path}},
+                {new: true}    
+            )
+            console.log(user)
+            console.log('path have been specified in the schema')
+            return user
+        } catch(error) {
+            console.log(error)
+        }
+    }
+
+    async removeFilePath(email) {
+        const path = ''
+        try {
+            const user = await User.findOneAndUpdate(
+                {email: email},
+                { $set: {imagePath: path}},
+                {new: true}    
+            )
+        } catch(error) {
+            console.error(error)
+        }   
+    }
 }
+
 
 module.exports = DbClient;
