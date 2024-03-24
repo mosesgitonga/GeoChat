@@ -17,9 +17,9 @@ const setAccessTokenCookie = (res, token, email) => {
 }
 
 class UsersController {
-    static async createUser(req, res) {
+    static async signup(req, res) {
         try {
-            const { firstname, secondname, username, email, course, cohort, imagePath, location} = req.body
+            const { username, email, course, cohort, imagePath, location} = req.body
             let { password } = req.body
 
             if (!req.body || Object.keys(req.body).length === 0) {
@@ -38,11 +38,6 @@ class UsersController {
             if (!imagePath) {
                 console.log('image path not found')
                 res.status(400).json({ error: 'image path missing'})
-                return
-            }
-            if (!firstname || !secondname ) {
-                console.log('unable to get the names')
-                res.status(400).json({ error: 'Names are missing' })
                 return
             }
             if (!course || !cohort) {
@@ -94,8 +89,6 @@ class UsersController {
 
                     const newUser = await User.create({
                         username,
-                        firstname,
-                        secondname,
                         email,
                         course,
                         cohort,

@@ -21,10 +21,13 @@ const injectRoutes = () => {
     // router.get('/message', (req, res) => {
     // res.sendFile(path.join(__dirname, '.', 'views', 'message.html'));
     // });
-    router.post('/users', UsersController.createUser);
-    router.post('/messages', MessagesController.createMessage);
-    router.get('/messages/:userID', MessagesController.getMessagesByUserID);
-    router.delete('/messages/:messageID', MessagesController.deleteMessage);
+    router.post('/signup', UsersController.signup);
+    router.get('/signup', (req, res) => {
+        res.render('signup');
+      });
+    router.post('/messages', MessageController.createMessage);
+    router.get('/messages/:userID', MessageController.getMessagesByUserID);
+    router.delete('/messages/:messageID', MessageController.deleteMessage);
     router.post('/login', AuthController.login);
     router.get('/login', (req, res) => {
         res.render('login'); 
