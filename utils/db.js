@@ -32,7 +32,10 @@ class DbClient {
             console.log('no username passed')
         }
         try {
-            const user = await User.findOne({ username: username }); 
+            const user = await User.findOne({ username: username });
+            if(!user) {
+                console.log('did not get user by username')
+            } 
             return user
         } catch(error) {
             console.error(error)
@@ -66,6 +69,22 @@ class DbClient {
         } catch(error) {
             console.error(error)
         }   
+    }
+
+    async getUsersBy(place=null) {
+        if (place === null) {
+            // if the argument place is empty return all users
+            return await User.find({})
+        }
+        if (place === 'country') {
+            return user.find({ })
+        }
+        if (place == 'region') {
+
+        }
+        if (place == 'town') {
+
+        }
     }
 }
 
