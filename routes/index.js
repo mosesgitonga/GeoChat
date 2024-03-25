@@ -44,6 +44,9 @@ const injectRoutes = () => {
     })
     router.get('/users/all', UsersController.listAllUsers)
     router.get('/profile/:username', UsersController.getSpecificUser)
+    router.get('/users/country', UsersController.listUsersByCountry)
+    router.get('/users/country/region', UsersController.listUsersByRegion)
+    router.get('/users/country/region/town', UsersController.listUsersByTown)
 
     //rooms
     router.post('/room', RoomController.createRoom)

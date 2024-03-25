@@ -19,7 +19,7 @@ const setAccessTokenCookie = (res, token, email) => {
 class UsersController {
     static async signup(req, res) {
         try {
-            const { username, email, course, cohort, imagePath, location} = req.body
+            const { username, email, course, cohort,imagePath, location} = req.body
             let { password } = req.body
 
             if (!req.body || Object.keys(req.body).length === 0) {
@@ -159,6 +159,84 @@ class UsersController {
             res.status(500).json({ error: 'Internal server error'})
         }
         
+    }
+
+    static async listUsersByCountry(req, res) {
+      try {
+        const { country, page } = req.query;
+        const pageNum = page || 0;
+        const limit = 10;
+
+        if(!country) {
+          return res.status(400).json({ error: 'Country parameter is required' });
+        }
+        const pageNumber = parseInt(page);
+        const skip = pageNumber * limit;
+
+        const usersByCountry = await User.aggregate([
+          { $match: { 'location.country': country } },
+          { $sample: { size: limit } },
+          { $skip: skip },
+          { $limit: limit }
+        ]);
+
+        res.json(usersByCountry);
+      } catch (error) {
+          console.error('Error fetching users:', error);
+          res.status(500).json({ error: 'Internal server error' });
+      }
+    }
+
+    static async listUsersByRegion(req, res) {
+      try {
+        const { country, region, page } = req.query;
+        const pageNum = page || 0;
+        const limit = 10;
+
+        if(!country || !region) {
+          return res.status(400).json({ error: 'Country and region parameter are required' });
+        }
+        const pageNumber = parseInt(page);
+        const skip = pageNumber * limit;
+
+        const usersByRegion = await User.aggregate([
+          { $match: { 'location.country': country, 'location.region': region } },
+          { $sample: { size: limit } },
+          { $skip: skip },
+          { $limit: limit }
+        ]);
+
+        res.json(usersByRegion);
+      } catch (error) {
+          console.error('Error fetching users:', error);
+          res.status(500).json({ error: 'Internal server error' });
+      }
+    }
+
+    static async listUsersByTown(req, res) {
+      try {
+        const { country, region, town, page } = req.query;
+        const pageNum = page || 0;
+        const limit = 10;
+
+        if(!country || !region || !town) {
+          return res.status(400).json({ error: 'Country, region and town parameter are required' });
+        }
+        const pageNumber = parseInt(page);
+        const skip = pageNumber * limit;
+
+        const usersBytown = await User.aggregate([
+          { $match: { 'location.country': country, 'location.region': region, 'location.town': town } },
+          { $sample: { size: limit } },
+          { $skip: skip },
+          { $limit: limit }
+        ]);
+
+        res.json(usersBytown);
+      } catch (error) {
+          console.error('Error fetching users:', error);
+          res.status(500).json({ error: 'Internal server error' });
+      }
     }
 }
 

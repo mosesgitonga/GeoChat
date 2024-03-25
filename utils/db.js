@@ -77,7 +77,7 @@ class DbClient {
             return await User.find({})
         }
         if (place === 'country') {
-            return user.find({ })
+            return await User.find({'location.country': country })
         }
         if (place == 'region') {
 
