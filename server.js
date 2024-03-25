@@ -23,8 +23,18 @@ app.get('/inbox', (req, res) => {
 });
 //
 
-socketIdMapWithUserId = new Map();
+// socketIdMapWithUserId = new Map();
 
+global.onlineStudents = new Map()
+
+//am getting key from map which i will use when removing user from onlineStudets
+const getKey = (map, value) => {
+    for (let [key, val] of map.entries()) {
+        if (val === value) {
+            return key
+        }
+    }
+}
 io.on('connection', async (socket) => {
     console.log('user connected', socket.id);
     try {
@@ -38,32 +48,27 @@ io.on('connection', async (socket) => {
     console.log(email);  
     const user = await dbClient.getUserByEmail(email);
     
-    socketIdMapWithUserId.set(socket.id, user.id)
+    onlineStudents.set(user.id, socket.id)
     } catch(error) {
         console.log(error);
     }
-    console.log(socketIdMapWithUserId);
+    console.log(onlineStudents)
     socket.on('error', (error) => {
         console.log(error);
     });
  
     socket.on('disconnect', () => {
-        console.log('user disconnected');
-        const userId = socketIdMapWithUserId.get(socket.id)
-        
-        if (userId) {
-            socketIdMapWithUserId.delete(socket.id)
-            console.log(`removed socket ${socket.id} from map`)
-        } else {
-            console.log(`userid not found for socket ${socket.id}`)
-        }
+        console.log('user disconnected')
+        onlineStudents.delete(getKey(onlineStudents, socket.id))
+        socket.emit("getUsers", Array.from(onlineStudents))
+        console.log(`user removed from the online students map`)
     })
 
-    socket.on('message', (data) => {
-        console.log('message: ' + data.message);
-        io.emit('message', data)});
+    socket.on('sendMessage', (data) => {
+        console.log('message: ' + data.message)
+        io.emit('sendMessage', data)})
         
-    });
+    })
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

@@ -13,7 +13,7 @@ body {
 }
 
 header {
-    background-color: #df3b3b;
+    background-color: #006680;
     color: #49d729;
     padding: 20px;
     display: flex;
@@ -73,7 +73,11 @@ main {
     margin-bottom: 10px;
     margin-bottom: 1px; 
     color:rgb(29, 34, 39);
-    margin-bottom: 8px;   
+    margin-bottom: 8px; 
+    height: 25px; 
+    margin-bottom: 1px;
+    background-color: #5ba9ae;
+    color: whitesmoke;
 }
 
 .student-list ul li img {
@@ -85,7 +89,7 @@ main {
 }
 
 footer {
-    background-color: #df3b3b;
+    background-color: #43bcca;
     padding: 20px;
     color: #333;
     text-align: center;

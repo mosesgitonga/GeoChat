@@ -3,53 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>Chat</title>
+  <link rel="stylesheet" href="./styles/chatbox.css">
 </head>
 <body>
-    <form id="messageForm">
-    <input type="text" id="roomIdInput" placeholder="Room ID">
-    <input type="text" id="messageInput" placeholder="Message">
-    <button type="submit">Send</button>
-  </form>
-  <ul id="thread"></ul>
-
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> 
-  <script>
-    const email = localStorage.getItem('email')
+    <div class="container">
+        <div class="profile-link">
+            <a href="./profile.html">
+                <img src="profile-pic.jpg" alt="Profile Picture">
+                View Profile
+            </a>
+        </div>
+        <form id="messageForm">
+            <input type="text" id="messageInput" placeholder="Message">
+            <button type="submit">Send</button>
+        </form>
+        <ul id="thread"></ul>
+    </div>
     
-    if (!email) {
-      console.log('no email cookie is present')
-    }
-    console.log(email)
-    // Connect to the Socket.io server
-    const socket = io({
-      query: {
-        email: email
-      }
-    });
-
-    const form = document.getElementById('messageForm');
-    const input = document.getElementById('messageInput');
-    const thread = document.getElementById('thread');
-
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-
-      const roomId = document.getElementById('roomIdInput').value;
-      const message = input.value;
-
-      // Send the message to the server
-      socket.emit('message', { roomId, message });
-
-      input.value = '';
-    });
-
-    socket.on('message', (data) => {
-      const message = document.createElement('li');
-      console.log(data.message)
-      message.textContent = data.message;
-      thread.appendChild(message);
-    });
-  </script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> 
+    <script src="./scripts/chatbox.js"></script>
 </body>
 </html>
