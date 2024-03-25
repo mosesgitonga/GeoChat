@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search)
     console.log('URL Params: ', window.location.search)
     const email = urlParams.get('email')
-    const userId = urlParams.get('id')
-    console.log("UserId s:", userId)
+    const receiverId = urlParams.get('id')
+  
 
     console.log('Email: ',email)
     if (!email) {
@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
     messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const receiverId = userId
         const message = input.value
         if (message) {
-            socket.emit('sendMessage', { userId, message })
+            console.log(receiverId)
+            socket.emit('sendMessage', { receiverId, message })
             messageInput.value = ''
         }
 

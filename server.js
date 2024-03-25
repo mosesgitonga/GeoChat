@@ -75,6 +75,7 @@ io.on('connection', async (socket) => {
         } else {
             console.log('Recipient id: ', receiverId)
             console.log('Recipient socket: ', recipientSocketId)
+            console.log('message', message)
         }
       });
 
