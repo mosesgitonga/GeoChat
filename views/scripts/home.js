@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userList = document.getElementById('users-list');
 
+    const urlParams = new URLSearchParams(window.location.search)
+    const email = urlParams.get('email')
+  
 
     fetch('/api/users/all')
         .then(response => {
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
             userList.querySelectorAll('.user-link').forEach(li => {
                 li.addEventListener('click', () => {
                     const userId = li.getAttribute('user-id')
-                    window.location.href = `/chat-box.html?userId=${userId}`
+                    window.location.href = `/chat-box.html?email=${email}&id=${encodeURIComponent(userId)}`
                 })
             })
         })

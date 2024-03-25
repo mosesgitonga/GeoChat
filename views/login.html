@@ -65,7 +65,9 @@ wq{% load static %}
                 .then(response => {
                     if (response.ok) {
                         console.log('login successful')
-                        window.location.href = '/homepage.html'
+                        const encodedEmail = encodeURIComponent(email)
+                      
+                        window.location.href = `/homepage.html?email=${encodedEmail}`
                     } else {
                         console.log('Failed to login')
                         window.location.href = '/login.html'

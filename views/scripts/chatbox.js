@@ -1,36 +1,42 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search)
+    console.log('URL Params: ', window.location.search)
+    const email = urlParams.get('email')
+    const userId = urlParams.get('id')
+    console.log("UserId s:", userId)
 
-const email = localStorage.getItem('email')
-    
-if (!email) {
-    console.log('no email cookie is present')
-}
-console.log(email)
-// Connect to the Socket.io server
-const socket = io({
-    query: {
-    email: email
+    console.log('Email: ',email)
+    if (!email) {
+        console.log('no email is present in the parameters')
     }
-});
+    console.log(email)
+    // Connect to the Socket.io server
+    const socket = io({
+        query: {
+        email: email
+        }
+    });
 
-const form = document.getElementById('messageForm');
-const input = document.getElementById('messageInput');
-const thread = document.getElementById('thread');
+    const messageForm = document.getElementById('messageForm');
+    const input = document.getElementById('messageInput');
 
-form.addEventListener('submit', (event) => {
-    event.preventDefault();
+    messageForm.addEventListener('submit', (event) => {
+        event.preventDefault();
 
-    const roomId = document.getElementById('roomIdInput').value;
-    const message = input.value;
+        const receiverId = userId
+        const message = input.value
+        if (message) {
+            socket.emit('sendMessage', { userId, message })
+            messageInput.value = ''
+        }
 
-    // Send the message to the server
-    socket.emit('sendMessage', { roomId, message });
+    });
 
-    input.value = '';
-});
+    socket.on('getMessage', (data) => {
+        const thread = document.getElementById('thread')
 
-socket.on('sendMessage', (data) => {
-    const message = document.createElement('li');
-    console.log(data.message)
-    message.textContent = data.message;
-    thread.appendChild(message);
-});
+        const messageItem = document.createElement('li')
+        messageItem.textContent = `${data.senderId}  ${data.message}`
+        thread.appendChild(messageItem);
+    });
+})

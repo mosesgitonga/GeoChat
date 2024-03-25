@@ -64,12 +64,21 @@ io.on('connection', async (socket) => {
         console.log(`user removed from the online students map`)
     })
 
-    socket.on('sendMessage', (data) => {
-        console.log('message: ' + data.message)
-        io.emit('sendMessage', data)})
-        
-    })
 
+    socket.on("sendMessage", ({ senderId, receiverId, message }) => {
+        const recipientSocketId = onlineStudents.get(receiverId);
+        if (recipientSocketId) {
+          socket.to(recipientSocketId).emit("getMessage", {
+            senderId,
+            message,
+          });
+        } else {
+            console.log('Recipient id: ', receiverId)
+            console.log('Recipient socket: ', recipientSocketId)
+        }
+      });
+
+})
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
