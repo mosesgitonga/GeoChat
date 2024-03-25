@@ -19,27 +19,28 @@ const setAccessTokenCookie = (res, token, email) => {
 class UsersController {
     static async signup(req, res) {
         try {
-            const { username, email, course, cohort,imagePath, location} = req.body
+            const { username, email, course, cohort, location} = req.body
             let { password } = req.body
 
             if (!req.body || Object.keys(req.body).length === 0) {
                 return res.status(400).json({ error: 'Request body is missing or empty' });
             }
 
-            const { country,  region, town, latitude, longitude } = location || {}
+            const { country,  region, town } = location || {}
 
             //validate
             if (!username) {
                 console.log('no username provided')
-                res.status(400).json({ error: 'username not provided'})
-                return
+                return res.status(400).json({ error: 'username not provided'})
+                
             }
-
+            /** 
             if (!imagePath) {
                 console.log('image path not found')
                 res.status(400).json({ error: 'image path missing'})
                 return
             }
+            */
             if (!course || !cohort) {
                 console.log('unable to get school credentials')
                 res.status(400).json({ error: 'Course credentials are Missing' })
@@ -61,24 +62,24 @@ class UsersController {
                 res.status(400).json({ error: 'Country, region or town missing'})
                 return
             }
-
+            /*
             if (!longitude || !latitude) {
                 //it should not return anything because the latitude longitude are not mandatory
                 //this is because the user might not allow us to access his/her location through the api
                 console.log('did not recieve the longitude and latitude from google maps api')
             }
-            
+            */
             // Validate whether user is already stored in the database.
             const ExistingUser = await dbClient.getUserByUsername(username)
             if (ExistingUser) {
                 console.log('User already exists in the db')
-                res.status(200).json({ error: 'User already exists' })
-                return
+                return res.status(400).json({ error: 'User already exists' })
+                
             }
             const user = await dbClient.getUserByEmail(email)
             if (user) {
                 console.log('user already exists in the db')
-                res.status(200).json({ error: 'User already exists'})
+                res.status(400).json({ error: 'User already exists'})
                 return
             } else {
                 try {
@@ -93,13 +94,11 @@ class UsersController {
                         course,
                         cohort,
                         password,
-                        imagePath,
+                      
                         location: {
                             country,
                             region,
                             town,
-                            latitude,
-                            longitude
                         }
                     });
 

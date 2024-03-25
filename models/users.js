@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     cohort: { type: String, required: true },
     email : { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    imagePath: { type: String, required: true },
+    imagePath: { type: String, required: false},
     location: { type: locationSchema, required: true }// i called the location sub doc defined above
 }, { timestamps: true }) 
 

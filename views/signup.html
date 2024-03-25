@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta information for character set and viewport -->
+ 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Title and stylesheets -->
+ 
   <title>Sign in - GeoChat</title>
-  <link rel="stylesheet" href="../static/css/search.css">
+  <link rel="stylesheet" href="./styles/signup.css">
   <link rel="shortcut icon" href="../static/images/icon.svg">
 </head>
 <body>
@@ -25,7 +25,7 @@
   <div class="container">
     <h2>User Registration</h2>
     <form id="registrationForm" method="post">
-      <!-- Input fields for user registration -->
+     
       <input type="text" id="username" name="username" placeholder="Username" required>
 
       <input type="email" id="email" name="email" placeholder="Email" required>
@@ -36,25 +36,19 @@
     
       <input type="password" id="password" name="password" placeholder="Password" required>
      
-      <input type="text" id="imagePath" name="imagePath" placeholder="Image Path" required>
-
       <input type="text" id="country" name="country" placeholder="Country" >
       <input type="text" id="region" name="region" placeholder="Region" required>
 
       <input type="text" id="town" name="town" placeholder="Town" required>
 
-      <input type="number" id="latitude" name="latitude" placeholder="Latitude" >
-
-      <input type="number" id="longitude" name="longitude" placeholder="Longititude" >
-
-      <!-- Submit button for registration -->
+     
 
       <button type="submit">Sign in</button>      
     </form>
-    <!-- Link to login page for existing users -->
+   
     <p>Already have an account? <a href="./login.html">Login here</a></p>
   </div>
-  <!-- Script tag for including a JavaScript file -->
+  
   <script>
     document.getElementById('registrationForm').addEventListener('submit', async function(event) {
       event.preventDefault();
@@ -64,12 +58,10 @@
       const course = document.getElementById('course').value;
       const cohort = document.getElementById('cohort').value;
       const password = document.getElementById('password').value;
-      const imagePath = document.getElementById('imagePath').value;
+     
       const country = document.getElementById('country').value;
       const region = document.getElementById('region').value;
       const town = document.getElementById('town').value;
-      const latitude = document.getElementById('latitude').value;
-      const longitude = document.getElementById('longitude').value;
 
       try {
 	const response = await fetch('/api/signup', {
@@ -83,13 +75,11 @@
             course,
             cohort,
             password,
-            imagePath,
+           
             location: {
               country,
               region,
               town,
-              latitude,
-              longitude
 	    }
           })
       });
@@ -107,7 +97,7 @@
   });
   </script>
   <footer class="footer">
-   <p>&copy; 2023 AutoMech Locator. All rights reserved.</p>
+   <p>&copy; 2024 GeoChat. All rights reserved.</p>
   </footer>
 
 <body>
