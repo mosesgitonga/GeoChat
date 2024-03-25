@@ -174,7 +174,7 @@ class UsersController {
         const skip = pageNumber * limit;
 
         const usersByCountry = await User.aggregate([
-          { $match: { 'location.country': country } },
+          { $match: { 'location.country': { $regex: new RegExp(country, 'i') } } },
           { $sample: { size: limit } },
           { $skip: skip },
           { $limit: limit }
@@ -200,7 +200,10 @@ class UsersController {
         const skip = pageNumber * limit;
 
         const usersByRegion = await User.aggregate([
-          { $match: { 'location.country': country, 'location.region': region } },
+          { $match: {
+ 	    'location.country': { $regex: new RegExp(country, 'i') },
+	    'location.region': { $regex: new RegExp(region, 'i') },
+	  } },
           { $sample: { size: limit } },
           { $skip: skip },
           { $limit: limit }
@@ -226,7 +229,11 @@ class UsersController {
         const skip = pageNumber * limit;
 
         const usersBytown = await User.aggregate([
-          { $match: { 'location.country': country, 'location.region': region, 'location.town': town } },
+          { $match: {
+	    'location.country': { $regex: new RegExp(country, 'i') },
+	    'location.region': { $regex: new RegExp(region, 'i') },
+	    'location.town': { $regex: new RegExp(country, 'i') }
+	  } },
           { $sample: { size: limit } },
           { $skip: skip },
           { $limit: limit }
