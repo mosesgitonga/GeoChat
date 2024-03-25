@@ -13,7 +13,7 @@ body {
 }
 
 header {
-    background-color: #df3b3b;
+    background-color: #006680;
     color: #49d729;
     padding: 20px;
     display: flex;
@@ -85,7 +85,7 @@ main {
 }
 
 footer {
-    background-color: #df3b3b;
+    background-color: #43bcca;
     padding: 20px;
     color: #333;
     text-align: center;

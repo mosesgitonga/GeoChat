@@ -64,7 +64,7 @@ io.on('connection', async (socket) => {
 
     socket.on('sendMessage', (data) => {
         console.log('message: ' + data.message)
-        io.emit('message', data)})
+        io.emit('sendMessage', data)})
         
     })
 

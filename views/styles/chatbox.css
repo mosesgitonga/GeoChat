@@ -1,0 +1,75 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Body styles */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  /* Container styles */
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  /* Profile link styles */
+  .profile-link {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .profile-link a {
+    display: inline-block;
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  .profile-link a:hover {
+    color: #1e90ff;
+  }
+  
+  /* Message thread styles */
+  #thread {
+    list-style-type: none;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+  
+  /* Message input styles */
+  #messageForm {
+    display: flex;
+    margin-top: auto; /* Push to the bottom */
+  }
+  #messageInput {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+  }
+  #messageInput:focus {
+    border-color: #1e90ff;
+  }
+  #messageForm button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    background-color: #1e90ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #messageForm button:hover {
+    background-color: #007bff;
+  }
