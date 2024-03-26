@@ -5,6 +5,9 @@ body {
     padding: 0;
 }
 
+#profile-image {
+    border-radius: 20px;
+}
 .container {
     max-width: 800px;
     margin: 50px auto;
