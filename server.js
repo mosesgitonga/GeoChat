@@ -1,5 +1,6 @@
 const injectRoutes = require('./routes/index.js');
 const DbClient = require('./utils/db.js');
+const 
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const { createServer } = require('http');
@@ -41,6 +42,7 @@ app.get('/inbox', (req, res) => {
 
 
 global.onlineStudents = new Map()
+const userChatHistory = new Map()
 
 //am getting key from map which i will use when removing user from onlineStudets
 const getKey = (map, value) => {
@@ -53,17 +55,22 @@ const getKey = (map, value) => {
 io.on('connection', async (socket) => {
     console.log('user connected', socket.id);
     try {
-    const email = socket.handshake.query.email
+        const email = socket.handshake.query.email
 
-    if (email === 'null') { //am using null as a str coz the frontend will return it as string
-        console.log('no email found, probably because no cookie was found');
-        console.log(email);
-    }
+        if (email === 'null') { //am using null as a str coz the frontend will return it as string
+            console.log('no email found, probably because no cookie was found');
+            console.log(email);
+        }
+        const user = await dbClient.getUserByEmail(email);
 
-    console.log(email);  
-    const user = await dbClient.getUserByEmail(email);
-    
-    onlineStudents.set(user.id, { id: socket.id, username: user.username})
+        //retrieve user history
+        const chatHistory = userChatHistory.get(user.id) || []
+        socket.emit('chatHistory', chatHistory)
+
+        console.log(email);  
+        
+        
+        onlineStudents.set(user.id, { id: socket.id, username: user.username})
     } catch(error) {
         console.log(error);
     }
@@ -71,7 +78,8 @@ io.on('connection', async (socket) => {
     socket.on('error', (error) => {
         console.log(error);
     });
- 
+    
+    
     socket.on('disconnect', () => {
         console.log('user disconnected')
         onlineStudents.delete(getKey(onlineStudents, socket.id))
@@ -90,11 +98,24 @@ io.on('connection', async (socket) => {
             message,
             time,
           }); 
+
+          //updating senders chat history
+          let chatHistory = userChatHistory.get(senderId) || []
+          chatHistory.push({senderId, receiverId, message, time})
+          userChatHistory.set(senderId, chatHistory)
+          
+          // updating recievers chat history
+          let receiverChatHistory = userChatHistory.get(receiverId) || [];
+          receiverChatHistory.push({ senderId, receiverId, message, time });
+          userChatHistory.set(receiverId, receiverChatHistory);
+
         } else {
             console.log('Recipient id: ', receiverId)
             console.log('Recipient socket: ', recipientSocket)
             console.log('message', message)
         }
+
+
       });
 
 })
