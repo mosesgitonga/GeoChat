@@ -36,12 +36,7 @@ const injectRoutes = () => {
     router.post('/upload', fileController.handleImageUpload.bind(fileController));
 
     router.delete('/user/image', fileService.deleteProfileImage)
-    router.get('/homepage', (req, res) => {
-      res.sendFile(join(__dirname, '../views/homepage.html'))
-    })
-    router.get('/inbox', (req, res) => {
-      res.sendFile(join(__dirname, '../views/chat-box.html'))
-    })
+   
     router.get('/users/all', UsersController.listAllUsers)
     router.get('/profile/:username', UsersController.getSpecificUser)
     router.get('/users/country', UsersController.listUsersByCountry)

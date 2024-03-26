@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('URL Params: ', window.location.search)
     const email = urlParams.get('email')
     const receiverId = urlParams.get('id')
-  
+    const senderId = urlParams.get('userId')
 
     console.log('Email: ',email)
     if (!email) {
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const message = input.value
         if (message) {
             console.log(receiverId)
-            socket.emit('sendMessage', { receiverId, message })
+            socket.emit('sendMessage', { senderId ,receiverId, message })
             messageInput.value = ''
         }
 
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const thread = document.getElementById('thread')
 
         const messageItem = document.createElement('li')
-        messageItem.textContent = `${data.senderId}  ${data.message}`
+        messageItem.textContent = `sender: ${data.username} - message: ${data.message}`
         thread.appendChild(messageItem);
     });
 })

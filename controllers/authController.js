@@ -50,9 +50,11 @@ class AuthController {
             }
             const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET_TOKEN, {expiresIn: '1w'})
 
+            req.session.userId = user._id
+
             setAccessTokenCookie(res, accessToken, user.email)
             console.log('The user made it to the homepage')
-            res.status(200).json('login is successful')         
+            res.status(200).json({ message: 'login is successful', userId: user._id})         
         } catch(error) {
             console.error(error)
             res.status(500).json({ error: 'internal server error' })

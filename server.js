@@ -6,10 +6,24 @@ const { createServer } = require('http');
 const { join } = require('path');
 const { Server } = require('socket.io');
 const { getUser } = require('./services/socketServices.js');
-
+const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session)
+const bodyParser = require('body-parser');
 const dbClient = new DbClient();
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+const store = new MongoDBStore({
+    uri: 'mongodb://localhost:27017/GeoChatDB',
+    collection: 'sessions',
+})
+app.use(session({
+    secret: "our_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    store: store
+}))
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('views'));
@@ -24,6 +38,7 @@ app.get('/inbox', (req, res) => {
 //
 
 // socketIdMapWithUserId = new Map();
+
 
 global.onlineStudents = new Map()
 
@@ -48,7 +63,7 @@ io.on('connection', async (socket) => {
     console.log(email);  
     const user = await dbClient.getUserByEmail(email);
     
-    onlineStudents.set(user.id, socket.id)
+    onlineStudents.set(user.id, { id: socket.id, username: user.username})
     } catch(error) {
         console.log(error);
     }
@@ -64,17 +79,20 @@ io.on('connection', async (socket) => {
         console.log(`user removed from the online students map`)
     })
 
-
     socket.on("sendMessage", ({ senderId, receiverId, message }) => {
-        const recipientSocketId = onlineStudents.get(receiverId);
-        if (recipientSocketId) {
-          socket.to(recipientSocketId).emit("getMessage", {
-            senderId,
+        const recipientSocket = onlineStudents.get(receiverId);
+        const senderInfo = onlineStudents.get(senderId)
+        const time = Date.now()
+        if (recipientSocket && senderInfo) {
+            const { username } = senderInfo
+            socket.to(recipientSocket.id).emit("getMessage", {
+            username,          
             message,
-          });
+            time,
+          }); 
         } else {
             console.log('Recipient id: ', receiverId)
-            console.log('Recipient socket: ', recipientSocketId)
+            console.log('Recipient socket: ', recipientSocket)
             console.log('message', message)
         }
       });
