@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const profileLink = document.querySelector('a');
+
     const urlParams = new URLSearchParams(window.location.search)
     console.log('URL Params: ', window.location.search)
     const email = urlParams.get('email')
     const receiverId = urlParams.get('id')
   
+    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}`;
 
     console.log('Email: ',email)
     if (!email) {
