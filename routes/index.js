@@ -26,8 +26,8 @@ const injectRoutes = () => {
         res.render('signup');
       });
     router.post('/messages', MessageController.createMessage);
-    router.get('/messages/:userID', MessageController.getMessagesByUserID);
-    router.delete('/messages/:messageID', MessageController.deleteMessage);
+    //router.get('/messages/:userID', MessageController.getMessagesByUserID);
+    //router.delete('/messages/:messageID', MessageController.deleteMessage);
     router.post('/login', AuthController.login);
     router.get('/login', (req, res) => {
         res.render('login'); 

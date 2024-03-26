@@ -1,6 +1,5 @@
 const injectRoutes = require('./routes/index.js');
 const DbClient = require('./utils/db.js');
-const 
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const { createServer } = require('http');
