@@ -1,0 +1,51 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile</title>
+  <link rel="stylesheet" href="./styles/profile.css">
+</head>
+<body>
+  <div class="container">
+    <h1>User Profile</h1>
+    <div id="profile-info"></div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const profileInfo = document.getElementById('profile-info');
+
+      const urlParams = new URLSearchParams(window.location.search); 
+      const userEmail = urlParams.get('email');
+
+      fetch(`/api/user/profile?email=${userEmail}`)
+        .then(response => {
+	  if (!response.ok) {
+            throw new Error('Failed to fetch user profile');
+          }
+          return response.json();
+        })
+        .then(data => {
+	  console.log(data)
+	  const user = data.user;
+	  profileInfo.innerHTML = `
+            <p><strong>Username:</strong> ${user.username}</p>
+	    <p><strong>Email:</strong> ${user.email}</p>
+            <p><strong>Course:</strong> ${user.course}</p>
+	    <p><strong>Cohort:</strong> ${user.cohort}</p>
+	    <p><strong>Country:</strong> ${user.location.country}</p>
+	    <p><strong>Region:</strong> ${user.location.region}</p>
+	    <p><strong>Town:</strong> ${user.location.town}</p> 
+	  `;
+        })
+        .catch(error => {
+          console.error('Error fetching user profile:', error.message);
+          profileInfo.innerHTML = '<p>Error fetching user profile</p>';
+        });
+        
+    });
+  </script>
+</body>
+</html>

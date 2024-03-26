@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     const userList = document.getElementById('users-list');
+    const profileLink = document.querySelector('nav ul li:last-child a');
 
     const urlParams = new URLSearchParams(window.location.search)
     const email = urlParams.get('email')
-  
-
+    
+    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}`;
+    
     fetch('/api/users/all')
         .then(response => {
             if (!response.ok) {

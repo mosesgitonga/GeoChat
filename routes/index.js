@@ -43,7 +43,10 @@ const injectRoutes = () => {
       res.sendFile(join(__dirname, '../views/chat-box.html'))
     })
     router.get('/users/all', UsersController.listAllUsers)
-    router.get('/profile/:username', UsersController.getSpecificUser)
+    router.get('/user/profile', UsersController.getSpecificUser)
+    router.get('/user/profile', (req, res) => {
+        res.render('profile');
+      });
     router.get('/users/country', UsersController.listUsersByCountry)
     router.get('/users/country/region', UsersController.listUsersByRegion)
     router.get('/users/country/region/town', UsersController.listUsersByTown)
