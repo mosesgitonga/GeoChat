@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const urlParams = new URLSearchParams(window.location.search)
     const email = urlParams.get('email')
+    const userId = urlParams.get('userId')
     
     profileLink.href = `./profile.html?email=${encodeURIComponent(email)}`;
     
@@ -19,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             localStorage.setItem( 'id', users._id)
             userList.innerHTML = '';
-
+            console.log(email)
             users.forEach(user => {
                 const listItem = document.createElement('li');
                 listItem.classList.add('user-link')
@@ -32,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             userList.querySelectorAll('.user-link').forEach(li => {
                 li.addEventListener('click', () => {
-                    const userId = li.getAttribute('user-id')
-                    window.location.href = `/chat-box.html?email=${email}&id=${encodeURIComponent(userId)}`
+                    const recipientId = li.getAttribute('user-id')
+                    window.location.href = `/chat-box.html?email=${email}&id=${encodeURIComponent(recipientId)}&userId=${encodeURIComponent(userId)}`
                 })
             })
         })

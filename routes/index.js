@@ -25,9 +25,9 @@ const injectRoutes = () => {
     router.get('/signup', (req, res) => {
         res.render('signup');
       });
-    router.post('/messages', MessageController.createMessage);
-    router.get('/messages/:userID', MessageController.getMessagesByUserID);
-    router.delete('/messages/:messageID', MessageController.deleteMessage);
+    router.post('/messages', MessageController.saveMessage);
+    //router.get('/messages/:userID', MessageController.getMessagesByUserID);
+    //router.delete('/messages/:messageID', MessageController.deleteMessage);
     router.post('/login', AuthController.login);
     router.get('/login', (req, res) => {
         res.render('login'); 
@@ -36,12 +36,7 @@ const injectRoutes = () => {
     router.post('/upload', fileController.handleImageUpload.bind(fileController));
 
     router.delete('/user/image', fileService.deleteProfileImage)
-    router.get('/homepage', (req, res) => {
-      res.sendFile(join(__dirname, '../views/homepage.html'))
-    })
-    router.get('/inbox', (req, res) => {
-      res.sendFile(join(__dirname, '../views/chat-box.html'))
-    })
+   
     router.get('/users/all', UsersController.listAllUsers)
     router.get('/user/profile', UsersController.getSpecificUser)
     router.get('/user/profile', (req, res) => {

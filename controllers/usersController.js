@@ -99,7 +99,7 @@ class UsersController {
                             country,
                             region,
                             town,
-                        }
+                                 }
                     });
 
                     if (newUser) {

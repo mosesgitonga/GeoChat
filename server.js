@@ -1,4 +1,5 @@
 const injectRoutes = require('./routes/index.js');
+const Message = require('./models/messages.js')
 const DbClient = require('./utils/db.js');
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -6,10 +7,25 @@ const { createServer } = require('http');
 const { join } = require('path');
 const { Server } = require('socket.io');
 const { getUser } = require('./services/socketServices.js');
-
+const session = require('express-session')
+const MongoDBStore = require('connect-mongodb-session')(session)
+const bodyParser = require('body-parser');
+const MessageController = require('./controllers/messageController.js');
 const dbClient = new DbClient();
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+const store = new MongoDBStore({
+    uri: 'mongodb://localhost:27017/GeoChatDB',
+    collection: 'sessions',
+})
+app.use(session({
+    secret: "our_secret_key", //should be placed in the .env incase of productiion
+    resave: false,
+    saveUninitialized: true,
+    store: store
+}))
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static('views'));
@@ -25,7 +41,9 @@ app.get('/inbox', (req, res) => {
 app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 
+
 global.onlineStudents = new Map()
+const userChatHistory = new Map()
 
 //am getting key from map which i will use when removing user from onlineStudets
 const getKey = (map, value) => {
@@ -38,17 +56,20 @@ const getKey = (map, value) => {
 io.on('connection', async (socket) => {
     console.log('user connected', socket.id);
     try {
-    const email = socket.handshake.query.email
+        const email = socket.handshake.query.email
 
-    if (email === 'null') { //am using null as a str coz the frontend will return it as string
-        console.log('no email found, probably because no cookie was found');
-        console.log(email);
-    }
+        if (email === 'null') { //am using null as a str coz the frontend will return it as string
+            console.log('no email found, probably because no cookie was found');
+            console.log(email);
+        }
+        const user = await dbClient.getUserByEmail(email);
 
-    console.log(email);  
-    const user = await dbClient.getUserByEmail(email);
-    
-    onlineStudents.set(user.id, socket.id)
+      
+
+        console.log(email);  
+        
+        
+        onlineStudents.set(user.id, { id: socket.id, username: user.username})
     } catch(error) {
         console.log(error);
     }
@@ -56,7 +77,8 @@ io.on('connection', async (socket) => {
     socket.on('error', (error) => {
         console.log(error);
     });
- 
+    
+    
     socket.on('disconnect', () => {
         console.log('user disconnected')
         onlineStudents.delete(getKey(onlineStudents, socket.id))
@@ -64,19 +86,30 @@ io.on('connection', async (socket) => {
         console.log(`user removed from the online students map`)
     })
 
+    socket.on("sendMessage", async ({ senderId, receiverId, message }) => {
+        const recipientSocket = onlineStudents.get(receiverId);
+        const senderInfo = onlineStudents.get(senderId)
+        const receiverInfo = onlineStudents.get(receiverId)
+        const time = Date.now()
 
-    socket.on("sendMessage", ({ senderId, receiverId, message }) => {
-        const recipientSocketId = onlineStudents.get(receiverId);
-        if (recipientSocketId) {
-          socket.to(recipientSocketId).emit("getMessage", {
-            senderId,
-            message,
-          });
+        const { username: senderName } = senderInfo
+        const { username: receiverName } = receiverInfo 
+
+        //saves msg to db whether user is offline or online
+        const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
+
+        if (recipientSocket && senderInfo) {
+
+            socket.to(recipientSocket.id).emit("getMessage", newMessage); 
+
+        
         } else {
             console.log('Recipient id: ', receiverId)
-            console.log('Recipient socket: ', recipientSocketId)
+            console.log('Recipient socket: ', recipientSocket)
             console.log('message', message)
         }
+
+
       });
 
 })

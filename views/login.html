@@ -42,45 +42,44 @@ wq{% load static %}
   <!-- Link to the script.js file for any client-side scripting -->
   <script src="{% static 'js/script.js' %}"></script>
   <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginForm = document.getElementById('loginForm')
-            const submit = document.getElementById('submit')
+    document.addEventListener('DOMContentLoaded', async function() {
+        const loginForm = document.getElementById('loginForm');
+        const submit = document.getElementById('submit');
 
-            submit.addEventListener('click', function(event) {
-                event.preventDefault()
+        submit.addEventListener('click', async function(event) {
+            event.preventDefault();
 
-                const email = document.getElementById('email').value  
-                const password = document.getElementById('password').value
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-                //store email in local storage
-                localStorage.setItem('email', email)
-                
-                fetch('/api/login', {
+            // Store email in local storage
+            localStorage.setItem('email', email);
+
+            try {
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({ email, password })
-                })
-                .then(response => {
-                    if (response.ok) {
-                        console.log('login successful')
-                        const encodedEmail = encodeURIComponent(email)
-                      
-                        window.location.href = `/homepage.html?email=${encodedEmail}`
-                    } else {
-                        console.log('Failed to login')
-                        window.location.href = '/login.html'
-                    }
-                })
-                .catch(error => {
-                    console.log('Error', error)
-                })
-                
-            })
-        })
+                });
 
-  </script>
+                if (response.ok) {
+                    console.log('Login successful');
+                    const encodedEmail = encodeURIComponent(email);
+                    const data = await response.json();
+                    // Append userId to the URL using '&' symbol
+                    window.location.href = `/homepage.html?email=${encodedEmail}&userId=${data.userId}`;
+                } else {
+                    console.log('Failed to login');
+                    window.location.href = '/login.html';
+                }
+            } catch (error) {
+                console.log('Error:', error);
+            }
+        });
+    });
+</script>
   <footer class="footer">
    <p>&copy; 2023 GeoChat. All rights reserved.</p>
   </footer>
