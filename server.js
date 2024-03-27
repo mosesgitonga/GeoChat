@@ -112,8 +112,7 @@ io.on('connection', async (socket) => {
             message = newMessage.message
         
         
-
-            socket.to(recipientSocket.id).emit("getMessage", senderName, receiverName, message); 
+            socket.to(recipientSocket.id).emit("getMessage", newMessage); 
 
         
         } else {
