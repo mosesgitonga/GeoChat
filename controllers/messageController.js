@@ -9,6 +9,8 @@ class MessageController {
         res.status(201).json(newMessage)
     } catch(error) {
         return res.status(409).json({ message: error.message})
+
+
     }
   }
 }
