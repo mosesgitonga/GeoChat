@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const receiverId = urlParams.get('id')
     const senderId = urlParams.get('userId')
   
-    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}`;
+    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(receiverId)}`;
 
 
     console.log('Email: ',email)

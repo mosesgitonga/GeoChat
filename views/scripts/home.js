@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = urlParams.get('email')
     const userId = urlParams.get('userId')
     
-    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}`;
+    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
     
     fetch('/api/users/all')
         .then(response => {

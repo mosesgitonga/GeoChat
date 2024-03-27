@@ -119,14 +119,14 @@ class UsersController {
     }
 
     static async getSpecificUser(req, res) {
-        const { email } = req.query;
-	if (!email) {
+        const { userId } = req.params;
+	if (!userId) {
             console.log('No email provided in the parameters')
-            res.status(400).json({ error: 'no email provided in the parameters' })
+            res.status(400).json({ error: 'no userId provided in the parameters' })
             return
         }
         try {
-            const user = await User.findOne({ email })
+            const user = await dbClient.getUserById(userId)
             console.log(user)
             if (!user) {
                 console.log('unable to fetch the user')
