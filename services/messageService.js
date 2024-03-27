@@ -1,7 +1,7 @@
 const Message = require('../models/messages')
 
 class MessageServices {
-    static async getPendingMessages(senderName, receiverName) {
+    static async getMessages(senderName, receiverName) {
         try {
             const pendingMessage = await Message.find({ 
                 $or: [
