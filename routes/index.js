@@ -25,7 +25,7 @@ const injectRoutes = () => {
     router.get('/signup', (req, res) => {
         res.render('signup');
       });
-    router.post('/messages', MessageController.createMessage);
+    router.post('/messages', MessageController.saveMessage);
     //router.get('/messages/:userID', MessageController.getMessagesByUserID);
     //router.delete('/messages/:messageID', MessageController.deleteMessage);
     router.post('/login', AuthController.login);

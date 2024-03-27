@@ -1,4 +1,5 @@
 const injectRoutes = require('./routes/index.js');
+const Message = require('./models/messages.js')
 const DbClient = require('./utils/db.js');
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -9,6 +10,7 @@ const { getUser } = require('./services/socketServices.js');
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const bodyParser = require('body-parser');
+const MessageController = require('./controllers/messageController.js');
 const dbClient = new DbClient();
 
 const app = express();
@@ -18,7 +20,7 @@ const store = new MongoDBStore({
     collection: 'sessions',
 })
 app.use(session({
-    secret: "our_secret_key",
+    secret: "our_secret_key", //should be placed in the .env incase of productiion
     resave: false,
     saveUninitialized: true,
     store: store
@@ -62,9 +64,7 @@ io.on('connection', async (socket) => {
         }
         const user = await dbClient.getUserByEmail(email);
 
-        //retrieve user history
-        const chatHistory = userChatHistory.get(user.id) || []
-        socket.emit('chatHistory', chatHistory)
+      
 
         console.log(email);  
         
@@ -86,28 +86,23 @@ io.on('connection', async (socket) => {
         console.log(`user removed from the online students map`)
     })
 
-    socket.on("sendMessage", ({ senderId, receiverId, message }) => {
+    socket.on("sendMessage", async ({ senderId, receiverId, message }) => {
         const recipientSocket = onlineStudents.get(receiverId);
         const senderInfo = onlineStudents.get(senderId)
+        const receiverInfo = onlineStudents.get(receiverId)
         const time = Date.now()
+
+        const { username: senderName } = senderInfo
+        const { username: receiverName } = receiverInfo 
+
+        //saves msg to db whether user is offline or online
+        const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
+
         if (recipientSocket && senderInfo) {
-            const { username } = senderInfo
-            socket.to(recipientSocket.id).emit("getMessage", {
-            username,          
-            message,
-            time,
-          }); 
 
-          //updating senders chat history
-          let chatHistory = userChatHistory.get(senderId) || []
-          chatHistory.push({senderId, receiverId, message, time})
-          userChatHistory.set(senderId, chatHistory)
-          
-          // updating recievers chat history
-          let receiverChatHistory = userChatHistory.get(receiverId) || [];
-          receiverChatHistory.push({ senderId, receiverId, message, time });
-          userChatHistory.set(receiverId, receiverChatHistory);
+            socket.to(recipientSocket.id).emit("getMessage", newMessage); 
 
+        
         } else {
             console.log('Recipient id: ', receiverId)
             console.log('Recipient socket: ', recipientSocket)

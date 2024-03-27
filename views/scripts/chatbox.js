@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        const message = input.value
+        const message = input.value.trim()
         if (message) {
             console.log(receiverId)
             socket.emit('sendMessage', { senderId ,receiverId, message })

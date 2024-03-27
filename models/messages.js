@@ -2,11 +2,16 @@ const mongoose = require('mongoose');
 
 // Define the message schema
 const messageSchema = new mongoose.Schema({
-  sender: {
+  senderName: {
     type: String,
     required: true
   },
-  content: {
+  receiverName: {
+    type: String,
+    required: true
+  },
+  
+  message: {
     type: String,
     required: true
   },
