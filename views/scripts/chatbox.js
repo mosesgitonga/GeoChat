@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Connect to the Socket.io server
     const socket = io({
         query: {
-        email: email
+        email: email,
+        receiverId: receiverId,
         }
     });
 
@@ -36,7 +37,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const thread = document.getElementById('thread')
 
         const messageItem = document.createElement('li')
-        messageItem.textContent = `sender: ${data.username} - message: ${data.message}`
+        messageItem.textContent = `sender: ${data.senderName} - message: ${data.message}`
         thread.appendChild(messageItem);
     });
+
+    socket.on('previousMessages', function(previousMessages) {
+        previousMessages.forEach(message => {
+            const messageItem = document.createElement('li');
+            messageItem.textContent = `sender ${message.senderName} - message ${message.message}`
+            thread.appendChild(messageItem)
+        })
+    })
 })

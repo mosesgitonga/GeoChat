@@ -57,17 +57,25 @@ io.on('connection', async (socket) => {
     console.log('user connected', socket.id);
     try {
         const email = socket.handshake.query.email
+        const receiverId = socket.handshake.query.receiverId
 
         if (email === 'null') { //am using null as a str coz the frontend will return it as string
-            console.log('no email found, probably because no cookie was found');
+            console.log('no email found from the query handshake');
             console.log(email);
         }
         const user = await dbClient.getUserByEmail(email);
+        senderName = user.username
 
-      
+        if (receiverId === 'null') {
+            console.log('no receiver id found fromthe query handshake')
+            console.log('sender id', receiverId)
+        } 
 
-        console.log(email);  
+        const receiverUser = await dbClient.getUserById(receiverId)
+        const receiverName = receiverUser.username
         
+        socket.senderName = senderName
+        socket.receiverName = receiverName
         
         onlineStudents.set(user.id, { id: socket.id, username: user.username})
     } catch(error) {
@@ -92,25 +100,42 @@ io.on('connection', async (socket) => {
         const receiverInfo = onlineStudents.get(receiverId)
         const time = Date.now()
 
-        const { username: senderName } = senderInfo
-        const { username: receiverName } = receiverInfo 
-
-        //saves msg to db whether user is offline or online
-        const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
-
+        
         if (recipientSocket && senderInfo) {
 
-            socket.to(recipientSocket.id).emit("getMessage", newMessage); 
+            const { username: senderName } = senderInfo
+            const { username: receiverName } = receiverInfo
+
+            //saves msg when user is online
+            const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
+
+            message = newMessage.message
+        
+        
+
+            socket.to(recipientSocket.id).emit("getMessage", senderName, receiverName, message); 
 
         
         } else {
+            const receiverUser = await dbClient.getUserById(receiverId)
+            const receiverName = receiverUser.username
+            console.log(receiverName)
+            const { username: senderName } = senderInfo
+
+
+            //saves msg when user is offline
+            const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
+
             console.log('Recipient id: ', receiverId)
             console.log('Recipient socket: ', recipientSocket)
             console.log('message', message)
         }
 
 
+
       });
+
+    MessageController.handleUserReconnection(socket)
 
 })
 const PORT = process.env.PORT || 3000;

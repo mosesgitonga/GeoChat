@@ -1,16 +1,22 @@
 const Message = require('../models/messages')
 
 class MessageServices {
-    static async getMessages(senderName, receiverName) {
+    static async getPreviousMessages(senderName, receiverName) {
         try {
-            const pendingMessage = await Message.find({ 
+            const previousMessages = await Message.find({ 
                 $or: [
-                    { senderName: receiverName },
-                    { senderName: receiverName }
+                    //check messages sent by the sender ro receiver and vise varsa
+                    { senderName: senderName, receiverName: receiverName },
+                    { senderName: receiverName, receiverName: senderName}
                 ]
-             })
-        } catch(error) {
+             }).sort({timestamp: 1})
 
+             return previousMessages
+        } catch(error) {
+            console.log('Error retrieving messages')
+            throw error
         }
     }
 }
+
+module.exports = MessageServices

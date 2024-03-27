@@ -43,6 +43,22 @@ class DbClient {
         }
     }
 
+    async getUserById(id) {
+        if (!id) {
+            console.log('id')
+        }
+        try {
+            const user = await User.findOne({ _id: id });
+            if(!user) {
+                console.log('did not get user by username')
+            } 
+            return user
+        } catch(error) {
+            console.error(error)
+
+        }
+    }
+
     async saveFilePath(email, path) {
         try {
             const user = await User.findOneAndUpdate(
