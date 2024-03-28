@@ -1,48 +1,48 @@
-/* Global styling for the body */
+
 body {
-    background-color: #004A66;
+  color: white;
+  background-color: #73a659;
     font-family: 'Arial', sans-serif;
     color: white;
   }
-  
-  /* Universal box-sizing for all elements */
   * {
     box-sizing: border-box;
   }
   
-  /* Styling for text color within specific elements */
+
+  
   body, h1, h2, h3, p, a {
     color: white;
   }
   
-  /* Styling for aligning specific elements */
   h2, p, a {
     text-align: center;
   }
   
-  /* Header styling */
+ 
+
+       
   header {
     height: 70px;
     width: 100%;
   }
   
-  /* Styling for navigation list within the header */
   header > ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
   }
   
-  /* Styling for list items in the header */
+ 
   li {
     display: inline;
     margin-right: 30px;
   
   }
   
-  /* Styling for padding and text alignment in the main container */
+
   .container {
-    background-color: #006680;
+    background-color: #DC3C3C;
     width: 30%;
     display: center;
     border-radius: 5px;
@@ -50,7 +50,7 @@ body {
     margin: 50px 100px 50px 350px;
   }
   
-  /* Styling for input fields, dropdown, and submit button */
+
   input[type=text], input[type=password], select {
     width: 90%;
     color: black;
@@ -64,7 +64,7 @@ body {
   
   input[type=submit] {
     width: 90%;
-    background-color: #4CAF50;
+    background-color: #76d622;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
@@ -73,7 +73,7 @@ body {
     cursor: pointer;
   }
   
-  /* Styling for buttons */
+  
   button {
     font-size: 20px;
     padding: 10px 20px;
@@ -84,14 +84,14 @@ body {
     background-color: #006080;
   }
   
-  /* Styling for the left-aligned section in the header */
+  
   .cta-0 {
     float: left;
   }
   
-  /* Styling for the footer */
+  
   footer {
-      background-color: #004A66;
+      background-color: #DC3C3C;
       color: white;
       width: 100%;
       position: relative;

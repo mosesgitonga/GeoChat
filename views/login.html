@@ -1,10 +1,9 @@
-wq{% load static %}
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Set character set, title, and viewport for responsive design -->
   <meta charset="utf-8">
-  <title>Login - AutoMech Locator</title>
+  <title>Login - GeoChat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Link to the login stylesheet and shortcut icon -->
   <link rel="stylesheet" href="./styles/login.css">
@@ -25,12 +24,12 @@ wq{% load static %}
   <!-- Main content container -->
   <div class="container">
     <form method="post" action="" id="loginForm" enctype="multipart/form-data">
-    <h2>Login</h2>
-      <label for="email">email</label><br>
-      <input type="text" id="email" placeholder="Email" style="color: black" required><br>
+      <h2>Login</h2>
+      <label for="email">Email</label><br>
+      <input type="text" id="email" placeholder="Email" required><br>
 
       <label for="password">Password</label><br>
-      <input type="password" id="password" placeholder="Password" style="color: #1db1a4d2" required><br>
+      <input type="password" id="password" placeholder="Password" required><br>
     
       <input type="submit" value="Login" name="login" id="submit">
     </form>
@@ -39,8 +38,11 @@ wq{% load static %}
 
   </div>
 
+  <footer class="footer">
+    <p>&copy; 2024 GeoChat. All rights reserved.</p>
+  </footer>
+
   <!-- Link to the script.js file for any client-side scripting -->
-  <script src="{% static 'js/script.js' %}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async function() {
         const loginForm = document.getElementById('loginForm');
@@ -80,9 +82,5 @@ wq{% load static %}
         });
     });
 </script>
-  <footer class="footer">
-   <p>&copy; 2023 GeoChat. All rights reserved.</p>
-  </footer>
-
 </body>
 </html>

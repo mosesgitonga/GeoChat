@@ -1,153 +1,162 @@
+/* General Styles */
 body {
+    font-family: Arial, sans-serif;
     margin: 0;
-}
-.header, .site-description {
-    background-color: #1f2937;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: white;
+    padding: 0;
 }
 
-h1 {
-    padding-left: 200px;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-ul {
-    display: flex;
+/* Header Styles */
+.header {
+    background-color: #DC3C3C; /* Orange */
+    color: rgb(236, 230, 230);
+    padding: 20px 0;
+}
+
+.logo {
+    margin-left: 20px;
+}
+
+.nav-links ul {
     list-style-type: none;
-    padding-right: 40px;
-}
-ul li {
-    margin-right: 30px;
-    color: white;
+    margin: 0;
+    padding: 0;
 }
 
-.site-description {
-    /*padding-top: 80px;
-    padding-left: 200px;*/
-    padding: 80px 0px 100px 200px;
+.nav-links ul li {
+    display: inline;
+    margin-left: 20px;
+}
+
+/* Hero Section Styles */
+.hero {
+    display: flex;
     justify-content: space-between;
-
+    align-items: center;
+    padding: 40px 0;
 }
 
-button {
-    background-color: #3882f6;
-    border: none;
-    width: 87px;
-    height: 40px;
-    border-radius: 10%;
-    color: rgb(255, 251, 251);
-    font-weight: bolder;
-    font-size: 18px;
+.hero-content {
+    width: 50%;
 }
 
-button:hover {
-    background-color: white;
-    color: #3882f6;
+.hero-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    animation: typing 5.5s steps(20) forwards; /* Typing animation */
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 3px solid; 
+    color: #5adf17; 
 }
-.image-tag {
-    width: 500px;
-    height: 350px;
-    padding-right:200px;
-    margin-left: 50px;
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: #4CAF50; /* Green */
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeIn 2s forwards; /* Fade-in animation */
+}
+
+.hero-image img {
+    width: 100vh;
     border-radius: 50%;
 }
 
-h3 {
-    text-align: center;
-    font-size: 32px;
+/* Info Section Styles */
+.info {
+    background-color: #FFE0B2; /* Light orange */
+    padding: 40px 0;
 }
 
-.some-info {
+.info h3 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.info-boxes {
     display: flex;
+    justify-content: space-around;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 30px;
-}
-.box-container {
-    display: flex;
-    flex-direction: column;
-    
-}
-.box {
-    width: 200px;
-    height: 150px;
-    border: 3px solid #3882f6;
-    border-radius: 10px;
-    margin: 0px 32px 10px 0px;
-
-    
-}
-.box:hover {
-    background-color: #1F2937;
 }
 
-.box-text {
-    margin-top: 10px;
-    width: 200px;
-    
-}
-
-.quote-text {
-    background-color: #E5E7EB;
-    display: flex;
-    width: 100%;
-    justify-content: center;
+.info-box {
+    width: 45%;
+    padding: 20px;
     text-align: center;
+    background-color: #DC3C3C; /* Light orange */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
-.quote-text p {
-    width: 700px;
-    padding: 6%;
-    color: #1F2937;
-    font-family: cursive;
+
+.info-box p {
+    color: #5adf17; /* Brown */
+}
+
+/* Testimonial Section Styles */
+.testimonial {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.testimonial p {
     font-style: italic;
-    font-size: 32px;
-}
-.end-container {
-    display: flex;
-    justify-content: center;
-    margin: 8%;
+    font-size: 1.2rem;
+    color: #5adf17; /* Turquoise */
 }
 
-.end-signup {
+/* Call to Action Section Styles */
+.cta {
+    background-color: #DC3C3C; /* Orange */
     color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #3882f6;
-    padding: 1%;
-    border-radius: 4%;
-    width: 60%;
-    height: 150px;
+    text-align: center;
+    padding: 60px 0;
+    margin-bottom: 30px;;
 }
 
-
-.end-signup button {
-    background-color: #E5E7EB;
-    color: #3882f6;
-    margin-left: 1cm;
+.cta h3 {
+    margin-bottom: 30px;
 }
 
-.end-signup button:hover {
-    background-color: #3882f6;
+.btn {
+    padding: 10px 20px;
+    background-color: #5adf17; 
     color: white;
-    border: 2px solid white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #DC3C3C; /* Lighter orange on hover */
 }
 
 footer {
-    background-color: #1F2937;
-    display: flex;
-    justify-content: center;
+    background-color: #DC3C3C; /* Orange */
+    color: white;
+    text-align: center;
+    padding: 20px 0;
 }
 
-footer ul {
-    color: white;
-    padding: 5%;
-    
+/* Keyframe animations */
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
 }
-footer p {
-    color:white;
-    margin: 0;
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
