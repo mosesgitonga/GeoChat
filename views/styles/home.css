@@ -12,6 +12,11 @@ body {
     line-height: 1.6;
 }
 
+img {
+    width: 200px;
+    height: 250px;
+    border-radius: 10%;
+}
 a {
     text-decoration: none;
     color: #333;
