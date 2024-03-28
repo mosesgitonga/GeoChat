@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const userList = document.getElementById('users-list');
+    const usersGrid = document.getElementById('users-grid');
     const profileLink = document.querySelector('nav ul li:last-child a');
+    const profileImage = document.querySelector('nav ul li:last-child a img')
 
     const urlParams = new URLSearchParams(window.location.search)
     const email = urlParams.get('email')
@@ -17,23 +18,32 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             const users = data.users
+            
 
+            profileLink.set
             localStorage.setItem( 'id', users._id)
-            userList.innerHTML = '';
+            usersGrid.innerHTML = '';
             console.log(email)
             users.forEach(user => {
-                const listItem = document.createElement('li');
-                listItem.classList.add('user-link')
+                if (user._id === userId) {
+                    const imagePath = user.imagePath
+                    console.log('image path', imagePath)
+                    profileImage.src = `../${imagePath}`
+          
+                }
+                const gridItem = document.createElement('div');
+                gridItem.classList.add('users-grid')
 
-                listItem.setAttribute('user-id', user._id)
+                gridItem.setAttribute('user-id', user._id)
 
-                listItem.textContent = `${user.username} - ${user.location.country}, ${user.email}, ${user.location.town}`;
-                userList.appendChild(listItem);
+                
+                gridItem.textContent = `${user.username} - ${user.location.country}, ${user.email}, ${user.location.town}`;
+                usersGrid.appendChild(gridItem);
             });
 
-            userList.querySelectorAll('.user-link').forEach(li => {
-                li.addEventListener('click', () => {
-                    const recipientId = li.getAttribute('user-id')
+            usersGrid.querySelectorAll('.users-grid').forEach(div => {
+                div.addEventListener('click', () => {
+                    const recipientId = div.getAttribute('user-id')
                     window.location.href = `/chat-box.html?email=${email}&id=${encodeURIComponent(recipientId)}&userId=${encodeURIComponent(userId)}`
                 })
             })
