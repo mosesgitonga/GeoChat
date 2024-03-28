@@ -48,11 +48,11 @@ body {
 .hero-content h2 {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    animation: typing 3s steps(30) forwards; /* Typing animation */
+    animation: typing 5.5s steps(20) forwards; /* Typing animation */
     white-space: nowrap;
     overflow: hidden;
-    border-right: 3px solid; /* Cursor effect */
-    color: #5adf17; /* Turquoise */
+    border-right: 3px solid; 
+    color: #5adf17; 
 }
 
 .hero-content p {

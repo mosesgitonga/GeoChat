@@ -72,6 +72,9 @@ io.on('connection', async (socket) => {
         } 
 
         const receiverUser = await dbClient.getUserById(receiverId)
+        if (!receiverUser) {
+            console.log('Error, cant get receiver. perhaps no user id  is found')
+        }
         const receiverName = receiverUser.username
         
         socket.senderName = senderName
@@ -117,8 +120,11 @@ io.on('connection', async (socket) => {
         
         } else {
             const receiverUser = await dbClient.getUserById(receiverId)
+            if (!receiverUser) {
+                console.log('no receiver found')
+                return
+            }
             const receiverName = receiverUser.username
-            console.log(receiverName)
             const { username: senderName } = senderInfo
 
 
