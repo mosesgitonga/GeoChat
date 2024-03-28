@@ -15,16 +15,23 @@ class FileService {
                     .then(() => cb(null, directory))
                     .catch(err => cb(err));
             },
-            filename: (req, file, cb) => {
+            filename:  (req, file, cb) => {
                 const email = req.cookies.email;
                 dbClient.getUserByEmail(email)
                     .then(user => {
                         const userId = user._id;
                         const currentImagePath = user.imagePath;
+
+                
+
                         if (currentImagePath) {
-                            return unlinkAsync(currentImagePath)
-                                .then(() => dbClient.saveFilePath(email, `./uploads/profile/${userId}-${file.originalname}`))
+                            dbClient.removeFilePath(email)
+                            console.log('image path is present')
+                            return  unlinkAsync(currentImagePath)
+                                .then(() =>  dbClient.saveFilePath(email, `./uploads/profile/${userId}-${file.originalname}`))
                                 .then(() => `${userId}-${file.originalname}`);
+                               
+                                
                         } else {
                             return dbClient.saveFilePath(email, `./uploads/profile/${userId}-${file.originalname}`)
                                 .then(() => `${userId}-${file.originalname}`);
