@@ -31,22 +31,26 @@ document.addEventListener('DOMContentLoaded', () => {
             usersGrid.innerHTML = '';
             console.log(email)
             users.forEach(user => {
+                if (user._id != userId) {
 
-                const gridItem = document.createElement('div');
-                gridItem.classList.add('users-grid')
-                gridItem.setAttribute('user-id', user._id)
+                
 
-                // appended the image
-                const image = document.createElement('img')
-                image.src = `../${user.imagePath}`
-                gridItem.appendChild(image)
-            
+                    const gridItem = document.createElement('div');
+                    gridItem.classList.add('users-grid')
+                    gridItem.setAttribute('user-id', user._id)
 
-                const userDetails = document.createElement('div')
-                userDetails.textContent = `${user.username} - ${user.location.country}-${user.location.region}-${user.location.town}`;
-                gridItem.appendChild(userDetails);
+                    // appended the image
+                    const image = document.createElement('img')
+                    image.src = `../${user.imagePath}`
+                    gridItem.appendChild(image)
+                
 
-                usersGrid.appendChild(gridItem)
+                    const userDetails = document.createElement('div')
+                    userDetails.textContent = `${user.username} - ${user.location.country}-${user.location.region}-${user.location.town}`;
+                    gridItem.appendChild(userDetails);
+
+                    usersGrid.appendChild(gridItem)
+                }
             });
 
             usersGrid.querySelectorAll('.users-grid').forEach(div => {
