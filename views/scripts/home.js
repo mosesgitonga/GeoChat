@@ -40,9 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const image = document.createElement('img')
                 image.src = `../${user.imagePath}`
                 gridItem.appendChild(image)
+            
 
-                gridItem.textContent = `${user.username} - ${user.location.country}, ${user.email}, ${user.location.town}`;
-                usersGrid.appendChild(gridItem);
+                const userDetails = document.createElement('div')
+                userDetails.textContent = `${user.username} - ${user.location.country}, ${user.location.region}, ${user.location.town}`;
+                gridItem.appendChild(userDetails);
+
+                usersGrid.appendChild(gridItem)
             });
 
             usersGrid.querySelectorAll('.users-grid').forEach(div => {
