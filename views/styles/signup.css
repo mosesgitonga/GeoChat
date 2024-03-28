@@ -1,66 +1,66 @@
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .container {
-    width: 80%;
-    margin: 50px auto;
-    text-align: center;
-  }
-  
-  form {
-    margin-top: 20px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  button {
-    width: calc(100% - 22px);
-    padding: 12px;
-    margin: 10px;
-    border: none;
-    border-radius: 5px;
-    box-sizing: border-box;
-    transition: all 0.3s ease;
-  }
-  
-  button {
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-  }
-  
-  footer {
-    margin-top: 20px;
-    text-align: center;
-    color: #888;
-  }
-  
-  /* Animation for form elements */
-  input,
-  button {
-    animation: slideIn 0.5s ease forwards;
-  }
-  
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateY(-50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+#menu {
+  background-color: #DC3C3C; 
+  color: white;
+  padding: 20px 0;
+}
+
+
+.container h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #b2e335; 
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form button[type="submit"] {
+  background-color: #DC3C3C; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+  background-color: #b2e335;
+  ; 
+}
+
+.container p {
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.container p a {
+  color: #12bbaa; 
+}
+
+footer {
+  background-color: #DC3C3C; 
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+}
