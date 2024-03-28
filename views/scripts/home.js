@@ -19,24 +19,28 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const users = data.users
             
+            // setting profile image
+            const currentUser = users.find(user => user._id === userId);
+            if (currentUser) {
+                const imagePath = currentUser.imagePath;
+                profileImage.src = `../${imagePath}`;
+            }
 
             profileLink.set
             localStorage.setItem( 'id', users._id)
             usersGrid.innerHTML = '';
             console.log(email)
             users.forEach(user => {
-                if (user._id === userId) {
-                    const imagePath = user.imagePath
-                    console.log('image path', imagePath)
-                    profileImage.src = `../${imagePath}`
-          
-                }
+
                 const gridItem = document.createElement('div');
                 gridItem.classList.add('users-grid')
-
                 gridItem.setAttribute('user-id', user._id)
 
-                
+                // appended the image
+                const image = document.createElement('img')
+                image.src = `../${user.imagePath}`
+                gridItem.appendChild(image)
+
                 gridItem.textContent = `${user.username} - ${user.location.country}, ${user.email}, ${user.location.town}`;
                 usersGrid.appendChild(gridItem);
             });
