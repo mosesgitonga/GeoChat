@@ -1,4 +1,3 @@
-const injectRoutes = require('./routes/index.js');
 const DbClient = require('./utils/db.js');
 const express = require('express');
 const http = require('http'); // Import the http module
@@ -9,8 +8,10 @@ const dbClient = new DbClient();
 const app = express();
 app.use(express.json());
 
-// Inject routes
-app.use('/api', injectRoutes());
+// Import room routes
+const roomRoutes = require('./routes/rooms.js');
+// Use room routes
+app.use('/api/rooms', roomRoutes);
 
 const PORT = process.env.PORT || 3000;
 

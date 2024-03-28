@@ -1,4 +1,4 @@
-const Room = require('../models/Room');
+const Room = require('../models/rooms');
 
 class RoomsController {
   // Controller function to add a user to a room
