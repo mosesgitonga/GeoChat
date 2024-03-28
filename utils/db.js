@@ -15,6 +15,18 @@ class DbClient {
         .catch((error) => console.error(`Error connecting to mongodb`, error))
    }
 
+   async getUserById(userId) {
+        if (!userId) {
+	    console.log('no userId passed');
+	}
+        try {
+            const user = await User.findById(userId);
+	    return user;
+	} catch(error) {
+	    console.error(error);
+	}
+   }
+
    async getUserByEmail(email) {
         if (!email) {
             console.log('no email passed')

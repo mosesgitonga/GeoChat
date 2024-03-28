@@ -38,7 +38,10 @@ const injectRoutes = () => {
     router.delete('/user/image', fileService.deleteProfileImage)
    
     router.get('/users/all', UsersController.listAllUsers)
-    router.get('/profile/:username', UsersController.getSpecificUser)
+    router.get('/user/profile/:userId', UsersController.getSpecificUser)
+    router.get('/user/profile/:userId', (req, res) => {
+        res.render('profile');
+      });
     router.get('/users/country', UsersController.listUsersByCountry)
     router.get('/users/country/region', UsersController.listUsersByRegion)
     router.get('/users/country/region/town', UsersController.listUsersByTown)

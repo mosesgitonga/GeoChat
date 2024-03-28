@@ -119,21 +119,18 @@ class UsersController {
     }
 
     static async getSpecificUser(req, res) {
-        const username = req.params.username
-        if (!username) {
-            console.log('No username provided in the parameters')
-            res.status(400).json({ error: 'no username provided in the parameters' })
+        const { userId } = req.params;
+	if (!userId) {
+            console.log('No email provided in the parameters')
+            res.status(400).json({ error: 'no userId provided in the parameters' })
             return
         }
-        if (!username) {
-            console.log('no username in the parameters')
-        }
         try {
-            const user = await dbClient.getUserByUsername(username)
+            const user = await dbClient.getUserById(userId)
             console.log(user)
             if (!user) {
                 console.log('unable to fetch the user')
-                res.status(400).json({ error: `Unable to fetch the user ${username}`})
+                res.status(400).json({ error: `Unable to fetch the user ${email}`})
                 return
             }
 
@@ -141,8 +138,7 @@ class UsersController {
         } catch(error) {
             console.log(error)
             res.status(500).json({ error: 'Internal server error'})
-    
-        }
+	}
     }
 
     static async listAllUsers(req, res) {

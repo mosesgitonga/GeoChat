@@ -37,9 +37,9 @@ const io = new Server(server);  // socket.io server
 app.get('/inbox', (req, res) => {
     res.sendFile(join(__dirname, './views/chat-box.html'));
 });
-//
 
-// socketIdMapWithUserId = new Map();
+app.use('/uploads', express.static(join(__dirname, 'uploads')));
+
 
 
 global.onlineStudents = new Map()
