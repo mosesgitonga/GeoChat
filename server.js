@@ -96,6 +96,7 @@ io.on('connection', async (socket) => {
 
     socket.on("sendMessage", async ({ senderId, receiverId, message }) => {
         const recipientSocket = onlineStudents.get(receiverId);
+        const senderSocketId = onlineStudents.get(senderId)
         const senderInfo = onlineStudents.get(senderId)
         const receiverInfo = onlineStudents.get(receiverId)
         const time = Date.now()
@@ -103,7 +104,7 @@ io.on('connection', async (socket) => {
         
         if (recipientSocket && senderInfo) {
 
-            const { username: senderName } = senderInfo
+            const { username: senderName, id: senderSocketId } = senderInfo
             const { username: receiverName } = receiverInfo
 
             //saves msg when user is online
@@ -111,9 +112,8 @@ io.on('connection', async (socket) => {
 
             message = newMessage.message
         
-        
-            socket.to(recipientSocket.id).emit("getMessage", newMessage); 
-
+            console.log('sender socket', senderSocketId)
+            io.to([recipientSocket.id, senderSocketId]).emit("getMessage", newMessage); 
         
         } else {
             const receiverUser = await dbClient.getUserById(receiverId)
@@ -124,6 +124,9 @@ io.on('connection', async (socket) => {
 
             //saves msg when user is offline
             const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
+
+            console.log('sender socket', senderSocketId.id)
+            io.to(senderSocketId.id).emit("getMessage", newMessage)
 
             console.log('Recipient id: ', receiverId)
             console.log('Recipient socket: ', recipientSocket)
