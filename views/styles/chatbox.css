@@ -11,7 +11,7 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 20px auto;
   background-color: #fff;
   border-radius: 8px;
@@ -39,7 +39,23 @@ body {
 .profile-link a:hover {
   text-decoration: underline;
 }
+.sender {
+  text-align: right;
+  clear: both;
+  color: green;
+  word-wrap: break-word;
+  position: absolute;
+  right: 0;
+  max-width: 50%;
 
+}
+
+.receiver {
+  color: blue;
+  background-color: #d85537;
+  text-align: left;
+  max-width: 50%;
+}
 #messageForm {
   display: flex;
   margin-bottom: 20px;
@@ -81,6 +97,11 @@ body {
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 10px;
+  display: block;
+  margin-bottom: 5px;
+
+ 
+  word-wrap: break-word;
 }
 
 #thread li:last-child {

@@ -6,7 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const email = urlParams.get('email')
     const receiverId = urlParams.get('id')
     const senderId = urlParams.get('userId')
-  
+
+    //renaming senderId for a new variable, this so as not to touch existing code
+    const userId = senderId
+    
+
+
     profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(receiverId)}`;
 
 
@@ -38,11 +43,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
-    socket.on('getMessage', (data) => {
+    socket.on('getMessage', ({senderName, receiverName, message, time, senderId}) => {
         const thread = document.getElementById('thread')
-
         const messageItem = document.createElement('li')
-        messageItem.textContent = `sender: ${data.senderName} - message: ${data.message}`
+
+        //implementation of css class
+        if (senderId === userId) {
+            messageItem.classList.add('sender')
+            //thread.appendChild(messageItem)
+        } else if (receiverId === userId) {
+            messageItem.classList.add('receiver')
+            // thread.prepend(messageItem)
+        }
+
+        messageItem.textContent = `time: ${time} sender: ${senderName} - message: ${message}`
         thread.appendChild(messageItem);
     });
 

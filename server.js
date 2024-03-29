@@ -4,12 +4,13 @@ const DbClient = require('./utils/db.js');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const { createServer } = require('http');
-const { join } = require('path');
+const { join, format } = require('path');
 const { Server } = require('socket.io');
 const { getUser } = require('./services/socketServices.js');
 const session = require('express-session')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const bodyParser = require('body-parser');
+const moment = require('moment')
 const MessageController = require('./controllers/messageController.js');
 const dbClient = new DbClient();
 
@@ -34,16 +35,14 @@ app.use('/api', injectRoutes());
 const server = createServer(app);
 const io = new Server(server);  // socket.io server
 
-app.get('/inbox', (req, res) => {
-    res.sendFile(join(__dirname, './views/chat-box.html'));
-});
+
 
 app.use('/uploads', express.static(join(__dirname, 'uploads')));
 
 
 
 global.onlineStudents = new Map()
-const userChatHistory = new Map()
+
 
 //am getting key from map which i will use when removing user from onlineStudets
 const getKey = (map, value) => {
@@ -56,6 +55,7 @@ const getKey = (map, value) => {
 io.on('connection', async (socket) => {
     console.log('user connected', socket.id);
     try {
+        //get email and receiverId from frontend query
         const email = socket.handshake.query.email
         const receiverId = socket.handshake.query.receiverId
 
@@ -63,6 +63,7 @@ io.on('connection', async (socket) => {
             console.log('no email found from the query handshake');
             console.log(email);
         }
+        
         const user = await dbClient.getUserByEmail(email);
         senderName = user.username
 
@@ -77,9 +78,11 @@ io.on('connection', async (socket) => {
         }
         const receiverName = receiverUser.username
         
+        //saves the sendername and receivername in the socket process
         socket.senderName = senderName
         socket.receiverName = receiverName
         
+        //updates the "onlineStudents" map with userId and socketId 
         onlineStudents.set(user.id, { id: socket.id, username: user.username})
     } catch(error) {
         console.log(error);
@@ -92,6 +95,8 @@ io.on('connection', async (socket) => {
     
     socket.on('disconnect', () => {
         console.log('user disconnected')
+
+        //delete the key and value in map of onlineStudents
         onlineStudents.delete(getKey(onlineStudents, socket.id))
         socket.emit("getUsers", Array.from(onlineStudents))
         console.log(`user removed from the online students map`)
@@ -102,8 +107,11 @@ io.on('connection', async (socket) => {
         const senderSocketId = onlineStudents.get(senderId)
         const senderInfo = onlineStudents.get(senderId)
         const receiverInfo = onlineStudents.get(receiverId)
-        const time = Date.now()
-
+        
+        //set time
+        const currentTime = moment()
+        const formattedTime = currentTime.format('HH:mm:ss')
+        const time = formattedTime
         
         if (recipientSocket && senderInfo) {
 
@@ -112,12 +120,11 @@ io.on('connection', async (socket) => {
 
             //saves msg when user is online
             const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
-
-            message = newMessage.message
-        
             console.log('sender socket', senderSocketId)
-            io.to([recipientSocket.id, senderSocketId]).emit("getMessage", newMessage); 
-        
+            io.to([recipientSocket.id, senderSocketId]).emit("getMessage", {
+                senderName, receiverName, message, time, senderId, receiverId
+            }); 
+
         } else {
             const receiverUser = await dbClient.getUserById(receiverId)
             if (!receiverUser) {
@@ -130,9 +137,11 @@ io.on('connection', async (socket) => {
 
             //saves msg when user is offline
             const newMessage = await MessageController.saveMessage(senderName, receiverName, message)
-
+         
             console.log('sender socket', senderSocketId.id)
-            io.to(senderSocketId.id).emit("getMessage", newMessage)
+            io.to(senderSocketId.id).emit("getMessage",{
+                senderName, receiverName, message, time, senderId, receiverId
+            })
 
             console.log('Recipient id: ', receiverId)
             console.log('Recipient socket: ', recipientSocket)
