@@ -1,4 +1,3 @@
-<!-- profile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,12 +41,25 @@
             <p><strong>Username:</strong> ${user.username}</p>
 	          <p><strong>Email:</strong> ${user.email}</p>
             <p><strong>Course:</strong> ${user.course}</p>
+
         <p><strong>Cohort:</strong> ${user.cohort}</p>
         <p><strong>Country:</strong> ${user.location.country}</p>
         <p><strong>Region:</strong> ${user.location.region}</p>
         <p><strong>Town:</strong> ${user.location.town}</p> `;
         profilePic.src = data.user.imagePath;
         heading.textContent = `${data.user.username}'s Profile`;
+
+	    <p><strong>Cohort:</strong> ${user.cohort}</p>
+	    <p><strong>Country:</strong> ${user.location.country}</p>
+	    <p><strong>Region:</strong> ${user.location.region}</p>
+	    <p><strong>Town:</strong> ${user.location.town}</p> 
+	  `;
+	  if (data.user.imagePath) {
+	    profilePic.src = data.user.imagePath;
+	  } else {
+	    profilePic.src = '/uploads/default_pp.png';
+	  }
+    	  heading.textContent = `${data.user.username}'s Profile`
 
         })
         .catch(error => {
