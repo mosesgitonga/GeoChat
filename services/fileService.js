@@ -15,25 +15,26 @@ class FileService {
                     .then(() => cb(null, directory))
                     .catch(err => cb(err));
             },
-            filename:  (req, file, cb) => {
+            filename: async (req, file, cb) => {
                 const email = req.cookies.email;
-                dbClient.getUserByEmail(email)
-                    .then(user => {
+                await dbClient.getUserByEmail(email)
+                    .then( async user => {
                         const userId = user._id;
                         const currentImagePath = user.imagePath;
 
                 
 
                         if (currentImagePath) {
-                            dbClient.removeFilePath(email)
-                            console.log('image path is present')
+
+                            const path = await dbClient.removeFilePath(email)
+                            console.log('image path is present', path)
                             return  unlinkAsync(currentImagePath)
-                                .then(() =>  dbClient.saveFilePath(email, `./uploads/profile/${userId}-${file.originalname}`))
-                                .then(() => `${userId}-${file.originalname}`);
+                               .then(async () => await  dbClient.saveFilePath(email, `./uploads/profile/${userId}-${file.originalname}`))
+                                .then( () => `${userId}-${file.originalname}`);
                                
                                 
                         } else {
-                            return dbClient.saveFilePath(email, `./uploads/profile/${userId}-${file.originalname}`)
+                            return await dbClient.saveFilePath(email, `./uploads/profile/${userId}-${file.originalname}`)
                                 .then(() => `${userId}-${file.originalname}`);
                         }
                     })
@@ -67,8 +68,9 @@ class FileService {
             }
             const imagePath = user.imagePath;
             if (!imagePath) {
+
                 console.log('No image path is set in the schema');
-                return res.status(404).json({ error: 'No image path is set in schema' });
+                return res.status(404).json({ error: 'No image path is set in  schema' });
             }
             await unlinkAsync(imagePath);
             await dbClient.removeFilePath(email);
