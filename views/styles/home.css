@@ -12,6 +12,11 @@ body {
     line-height: 1.6;
 }
 
+img {
+    width: 200px;
+    height: 250px;
+    border-radius: 10%;
+}
 a {
     text-decoration: none;
     color: #333;
@@ -25,6 +30,11 @@ header {
     text-align: center;
 }
 
+#profile-icon img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
 .logo h1 {
     font-size: 24px;
     margin: 0;
@@ -58,25 +68,27 @@ main {
     text-align: center;
 }
 
-.student-list {
+.users-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-gap: 20px;
-    justify-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
 }
 
-.student-list li {
-    list-style: none;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.user-link {
+    background-color: #00ff00; /* Green background color */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.student-list li img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
+/* Add margin to each user-link */
+.user-link {
+    margin-bottom: 20px;
+}
+
+/* Remove margin from last user-link to prevent extra spacing */
+.user-link:last-child {
+    margin-bottom: 0;
 }
 
 /* Footer Styles */
