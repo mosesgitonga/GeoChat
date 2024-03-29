@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 
 
                     const userDetails = document.createElement('div')
-                    userDetails.textContent = `${user.username} - ${user.location.country}-${user.location.region}-${user.location.town}`;
+                    userDetails.classList.add('user-details')
+                    userDetails.textContent = `${user.username}`;
                     gridItem.appendChild(userDetails);
 
                     usersGrid.appendChild(gridItem)
