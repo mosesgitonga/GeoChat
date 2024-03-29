@@ -158,24 +158,27 @@ class UsersController {
 
     static async listUsersByCountry(req, res) {
       try {
-        const { country, page } = req.query;
-        const pageNum = page || 0;
-        const limit = 10;
+	const { country } = req.query;     
+        // const { country, page } = req.query;
+        // const pageNum = page || 0;
+        // const limit = 10;
 
         if(!country) {
           return res.status(400).json({ error: 'Country parameter is required' });
         }
-        const pageNumber = parseInt(page);
-        const skip = pageNumber * limit;
 
-        const usersByCountry = await User.aggregate([
-          { $match: { 'location.country': { $regex: new RegExp(country, 'i') } } },
-          { $sample: { size: limit } },
-          { $skip: skip },
-          { $limit: limit }
-        ]);
+        const usersByCountry = await User.find({ 'location.country': { $regex: new RegExp(country, 'i') } });
+        // const pageNumber = parseInt(page);
+        // const skip = pageNumber * limit;
 
-        res.json(usersByCountry);
+        // const usersByCountry = await User.aggregate([
+        // { $match: { 'location.country': { $regex: new RegExp(country, 'i') } } },
+        // { $sample: { size: limit } },
+        // { $skip: skip },
+        // { $limit: limit }
+        // ]);
+
+        res.json({ users: usersByCountry });
       } catch (error) {
           console.error('Error fetching users:', error);
           res.status(500).json({ error: 'Internal server error' });
@@ -204,7 +207,7 @@ class UsersController {
           { $limit: limit }
         ]);
 
-        res.json(usersByRegion);
+        res.json({ users: usersByRegion });
       } catch (error) {
           console.error('Error fetching users:', error);
           res.status(500).json({ error: 'Internal server error' });
@@ -234,7 +237,7 @@ class UsersController {
           { $limit: limit }
         ]);
 
-        res.json(usersBytown);
+        res.json({ users: usersBytown });
       } catch (error) {
           console.error('Error fetching users:', error);
           res.status(500).json({ error: 'Internal server error' });
