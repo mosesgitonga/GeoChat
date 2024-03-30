@@ -43,28 +43,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
-    socket.on('getMessage', ({senderName, receiverName, message, time, senderId}) => {
+    socket.on('getMessage', ({senderName, receiverName, message, time, senderId, receiverId}) => {
         const thread = document.getElementById('thread')
-        const messageItem = document.createElement('li')
+       
+        const messageItem = document.createElement('div')
+
+        messageItem.textContent = `${time} sender:${senderName} \n message:${message}`
 
         //implementation of css class
         if (senderId === userId) {
             messageItem.classList.add('sender')
-            //thread.appendChild(messageItem)
+         
         } else if (receiverId === userId) {
             messageItem.classList.add('receiver')
-            // thread.prepend(messageItem)
         }
-
-        messageItem.textContent = `time: ${time} sender: ${senderName} - message: ${message}`
+       
         thread.appendChild(messageItem);
     });
 
     socket.on('previousMessages', function(previousMessages) {
         previousMessages.forEach(message => {
+            const div = document.createElement('div')
+            div.classList.add('message-div')
             const messageItem = document.createElement('li');
             messageItem.textContent = `sender ${message.senderName} - message ${message.message}`
-            thread.appendChild(messageItem)
+            console.log( 'id',message.senderId)
+            if (message.senderId === userId) {
+                messageItem.classList.add('sender');
+            } else if (message.receiverId === userId) {
+                messageItem.classList.add('receiver');
+            }
+
+            div.appendChild(messageItem);
+            thread.appendChild(div);
         })
     })
 })
