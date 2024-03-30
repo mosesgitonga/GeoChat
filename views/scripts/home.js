@@ -31,10 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const users = data.users
             
+	    //For default profile picture
+	    const defaultImagePath = '/uploads/default_pp.png';
+
             // setting profile image
             const currentUser = users.find(user => user._id === userId);
             if (currentUser) {
-                const imagePath = currentUser.imagePath;
+                const imagePath = currentUser.imagePath || defaultImagePath;
                 profileImage.src = `../${imagePath}`;
             }
 
