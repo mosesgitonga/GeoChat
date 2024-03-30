@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
        
         const messageItem = document.createElement('div')
 
-        messageItem.textContent = `${time} sender:${senderName} \n message:${message}`
+        messageItem.textContent = `${time}-${senderName}: ${message}`
 
         //implementation of css class
         if (senderId === userId) {
