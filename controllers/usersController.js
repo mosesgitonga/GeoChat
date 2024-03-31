@@ -228,7 +228,7 @@ class UsersController {
           { $match: {
 	    'location.country': { $regex: new RegExp(country, 'i') },
 	    'location.region': { $regex: new RegExp(region, 'i') },
-	    'location.town': { $regex: new RegExp(country, 'i') }
+	    'location.town': { $regex: new RegExp(town, 'i') }
 	  } },
           { $sample: { size: limit } },
           { $skip: skip },

@@ -53,27 +53,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Display users
                 users.forEach(user => {
-                    if (user._id) {
-                        if (user._id != userId) {
-                            const gridItem = document.createElement('div');
-                            gridItem.classList.add('users-grid');
-                            gridItem.setAttribute('user-id', user._id);
+                    if (user._id != userId) {
+                        const gridItem = document.createElement('div');
+                        gridItem.classList.add('users-grid');
+                        gridItem.setAttribute('user-id', user._id);
 
-                            // Appended the image
-                            const image = document.createElement('img');
-                            image.src = `../${user.imagePath}`;
-                            gridItem.appendChild(image);
+                        // Appended the image
+                        const image = document.createElement('img');
+                        image.src = `../${user.imagePath}`;
+                        gridItem.appendChild(image);
 
-                            const userDetails = document.createElement('div');
-                            userDetails.textContent = `${user.username} - ${user.location.country}-${user.location.region}-${user.location.town}`;
-                            gridItem.appendChild(userDetails);
-
-                            usersGrid.appendChild(gridItem);
-                        }
-                    } else {
-                        console.error('User object does not have _id property:', user);
-                    }
+                        const userDetails = document.createElement('div');
+                        userDetails.textContent = `${user.username} - ${user.location.country}-${user.location.region}-${user.location.town}`;
+                        gridItem.appendChild(userDetails);
+                    
+		        usersGrid.appendChild(gridItem);
+		    }
                 });
+		
+                usersGrid.querySelectorAll('.users-grid').forEach(div => {
+                    div.addEventListener('click', () => {
+                        const recipientId = div.getAttribute('user-id')
+                        window.location.href = `/chat-box.html?email=${email}&id=${encodeURIComponent(recipientId)}&userId=${encodeURIComponent(userId)}`
+		    })
+		})
 	    })
 	    .catch(error => {
             console.error('Error fetching users:', error);
@@ -163,6 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	    profileImage.src = `../${imagePath}`;
 	})
         .catch(error => {
-            console.error('Error fetching user profile:', error);
+           console.error('Error fetching user profile:', error);
         });
 });
