@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const users = data.users
             
 	    //For default profile picture
-	    const defaultImagePath = '/uploads/default_pp.png';
+	    const defaultImagePath = '../default_pp.svg';
 
             // setting profile image
             const currentUser = users.find(user => user._id === userId);
