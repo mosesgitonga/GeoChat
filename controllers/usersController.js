@@ -158,25 +158,23 @@ class UsersController {
 
     static async listUsersByCountry(req, res) {
       try {
-	const { country } = req.query;     
-        // const { country, page } = req.query;
-        // const pageNum = page || 0;
-        // const limit = 10;
+	const { country, page } = req.query;
+        const pageNum = page || 1;
+        const limit = 10;
 
         if(!country) {
           return res.status(400).json({ error: 'Country parameter is required' });
         }
 
-        const usersByCountry = await User.find({ 'location.country': { $regex: new RegExp(country, 'i') } });
-        // const pageNumber = parseInt(page);
-        // const skip = pageNumber * limit;
+        const pageNumber = parseInt(pageNum);
+        const skip = pageNumber * limit;
 
-        // const usersByCountry = await User.aggregate([
-        // { $match: { 'location.country': { $regex: new RegExp(country, 'i') } } },
-        // { $sample: { size: limit } },
-        // { $skip: skip },
-        // { $limit: limit }
-        // ]);
+        const usersByCountry = await User.aggregate([
+          { $match: { 'location.country': { $regex: new RegExp(country, 'i') } } },
+          { $sample: { size: limit } },
+          { $skip: skip },
+          { $limit: limit }
+          ]);
 
         res.json({ users: usersByCountry });
       } catch (error) {
@@ -187,31 +185,25 @@ class UsersController {
 
     static async listUsersByRegion(req, res) {
       try {
-	const { country, region } = req.query;      
-        //const { country, region, page } = req.query;
-        //const pageNum = page || 0;
-        //const limit = 10;
+	const { country, region, page } = req.query;
+        const pageNum = page || 0;
+        const limit = 10;
 
         if(!country || !region) {
           return res.status(400).json({ error: 'Country and region parameter are required' });
         }
-        //const pageNumber = parseInt(page);
-        //const skip = pageNumber * limit;
+        const pageNumber = parseInt(pageNum);
+        const skip = pageNumber * limit;
        
-	const usersByRegion = await User.find({
-	    'location.country': { $regex: new RegExp(country, 'i') },
-            'location.region': { $regex: new RegExp(region, 'i') },
-	})
-	
-        //const usersByRegion = await User.aggregate([
-        //  { $match: {
- 	//    'location.country': { $regex: new RegExp(country, 'i') },
-	//    'location.region': { $regex: new RegExp(region, 'i') },
-	//  } },
-        //  { $sample: { size: limit } },
-        //  { $skip: skip },
-        //  { $limit: limit }
-        //]);
+	const usersByRegion = await User.aggregate([
+          { $match: {
+ 	    'location.country': { $regex: new RegExp(country, 'i') },
+	    'location.region': { $regex: new RegExp(region, 'i') },
+	  } },
+          { $sample: { size: limit } },
+          { $skip: skip },
+          { $limit: limit }
+        ]);
 
         res.json({ users: usersByRegion });
       } catch (error) {
@@ -222,34 +214,26 @@ class UsersController {
 
     static async listUsersByTown(req, res) {
       try {
-	const { country, region, town } = req.query;      
-        // const { country, region, town, page } = req.query;
-        // const pageNum = page || 0;
-        // const limit = 10;
+	const { country, region, town, page } = req.query;
+        const pageNum = page || 0;
+        const limit = 10;
 
         if(!country || !region || !town) {
           return res.status(400).json({ error: 'Country, region and town parameter are required' });
         }
-        // const pageNumber = parseInt(page);
-        // const skip = pageNumber * limit;
+        const pageNumber = parseInt(pageNum);
+        const skip = pageNumber * limit;
 
-        const usersBytown = await User.find({
-            'location.country': { $regex: new RegExp(country, 'i') },
-            'location.region': { $regex: new RegExp(region, 'i') },
-            'location.town': { $regex: new RegExp(town, 'i') }
-
-	});
-        
-        //const usersBytown = await User.aggregate([
-        //  { $match: {
-	//    'location.country': { $regex: new RegExp(country, 'i') },
-	//    'location.region': { $regex: new RegExp(region, 'i') },
-	//    'location.town': { $regex: new RegExp(country, 'i') }
-	//  } },
-        //  { $sample: { size: limit } },
-        //  { $skip: skip },
-        //  { $limit: limit }
-        //]);
+        const usersBytown = await User.aggregate([
+          { $match: {
+	    'location.country': { $regex: new RegExp(country, 'i') },
+	    'location.region': { $regex: new RegExp(region, 'i') },
+	    'location.town': { $regex: new RegExp(country, 'i') }
+	  } },
+          { $sample: { size: limit } },
+          { $skip: skip },
+          { $limit: limit }
+        ]);
 
         res.json({ users: usersBytown });
       } catch (error) {

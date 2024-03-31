@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInputRegion = document.getElementById('search-input-region');
     const searchInputTown = document.getElementById('search-input-town');
     const searchButton = document.getElementById('search-button');
+    const prevPageButton = document.getElementById('prev-page');
+    const nextPageButton = document.getElementById('next-page');
 
     const urlParams = new URLSearchParams(window.location.search)
     const email = urlParams.get('email')
@@ -13,20 +15,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
     
+    let currentPage = 0;
+
     // Event listener for search input
-    searchButton.addEventListener('click', () => {
+    const fetchUsers = () => {
         const country = searchInputCountry.value.trim();
         const region = searchInputRegion.value.trim();
         const town = searchInputTown.value.trim();
 
-        let endpoint = '/api/users/';
+        let endpoint; 
 
 	if (country && region && town) {
-            endpoint += `country/region/town?country=${encodeURIComponent(country)}&region=${encodeURIComponent(region)}&town=${encodeURIComponent(town)}`;
+            endpoint = `/api/users/country/region/town?country=${encodeURIComponent(country)}&region=${encodeURIComponent(region)}&town=${encodeURIComponent(town)}&page=${currentPage}`;
         } else if (country && region) {
-            endpoint += `country/region?country=${encodeURIComponent(country)}&region=${encodeURIComponent(region)}`;
+            endpoint = `/api/users/country/region?country=${encodeURIComponent(country)}&region=${encodeURIComponent(region)}&page=${currentPage}`;
         } else if (country) {
-            endpoint += `country?country=${encodeURIComponent(country)}`;
+            endpoint = `/api/users/country?country=${encodeURIComponent(country)}&page=${currentPage}`;
         } else {
             // If no parameters provided, fetch all users
             fetchAllUsers();
@@ -75,10 +79,22 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching users:', error);
         });
 
+    };
+
+
+    searchButton.addEventListener('click', fetchUsers);
+
+    prevPageButton.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            fetchUsers();
+        }
     });
 
-
-
+    nextPageButton.addEventListener('click', () => {
+        currentPage++;
+        fetchUsers();
+    });
 
     // Function to fetch all users
     const fetchAllUsers = () => {
