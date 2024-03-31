@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search)
     const email = urlParams.get('email')
     const userId = urlParams.get('userId')
+
     
     //messages.href = `./messages.html?userId=${userId}&email=${email}`
     messagesLink.addEventListener('click', () => {
@@ -21,6 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     
+
+
+    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+
+
     fetch('/api/users/all')
         .then(response => {
             if (!response.ok) {
@@ -30,14 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             const users = data.users
-            
-	    //For default profile picture
-	    const defaultImagePath = '../default_pp.svg';
 
             // setting profile image
             const currentUser = users.find(user => user._id === userId);
             if (currentUser) {
-                const imagePath = currentUser.imagePath || defaultImagePath;
+                const imagePath = currentUser.imagePath;
                 profileImage.src = `../${imagePath}`;
             }
 
@@ -48,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             users.forEach(user => {
                 if (user._id != userId) {
 
-                
+
 
                     const gridItem = document.createElement('div');
                     gridItem.classList.add('users-grid')
@@ -58,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const image = document.createElement('img')
                     image.src = `../${user.imagePath}`
                     gridItem.appendChild(image)
-                
+
 
                     const userDetails = document.createElement('div')
                     userDetails.classList.add('user-details')
