@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             const users = data.users;
-            const defaultImagePath = '../default_p.png';
+            const defaultImagePath = '../default_p.svg';
 
             usersGrid.innerHTML = '';
             users.forEach(user => {
