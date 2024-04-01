@@ -29,11 +29,12 @@ const injectRoutes = () => {
     //router.get('/messages/:userID', MessageController.getMessagesByUserID);
     //router.delete('/messages/:messageID', MessageController.deleteMessage);
     router.post('/login', AuthController.login);
-    router.get('/login', (req, res) => {
+    router.get('/login', authenticateToken, (req, res) => {
         res.render('login'); 
       });
     router.post('/logout',authenticateToken, async (req, res) => await AuthController.logout(req, res))
     router.post('/upload', fileController.handleImageUpload.bind(fileController));
+    router.get('/chats', MessageController.getAllChatsForUser)
 
     router.delete('/user/image', fileService.deleteProfileImage)
    

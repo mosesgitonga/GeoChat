@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const messagesLink = document.querySelector('#chats');
     const usersGrid = document.getElementById('users-grid');
     const profileLink = document.querySelector('nav ul li:last-child a');
     const profileImage = document.querySelector('nav ul li:last-child a img')
@@ -7,7 +8,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const email = urlParams.get('email')
     const userId = urlParams.get('userId')
     
-    profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+    //messages.href = `./messages.html?userId=${userId}&email=${email}`
+    messagesLink.addEventListener('click', () => {
+        window.location.href = `messages.html?userId=${userId}&email=${email}`
+    })
+
+    const userEmail = localStorage.getItem('email')
+    if (email === userEmail) {
+        profileLink.href = `./currentUserProfile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+    } else {
+        profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+    }
+
     
     fetch('/api/users/all')
         .then(response => {

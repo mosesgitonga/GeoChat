@@ -17,6 +17,28 @@ class MessageServices {
             throw error
         }
     }
+
+    // list all initiated chats involving a specific user.
+     
+    static async allChats(username) {
+        try {
+            //getting distict combinationsof senderName and receiverName
+            const chats = await Message.aggregate([
+                { $match: {$or: [{senderName: username}, {receiverName: username}]}},
+                { $group: { _id: {senderName: '$senderName', receiverName: '$receiverName'}}}
+
+            ])
+
+            const initiatedChats = chats.map(chat => ({
+                senderName: chat._id.senderName,
+                receiverName: chat._id.receiverName
+            }))
+
+            return initiatedChats
+        } catch(error) {
+            console.log('Error retrieving user', error)
+        }
+    }
 }
 
 module.exports = MessageServices
