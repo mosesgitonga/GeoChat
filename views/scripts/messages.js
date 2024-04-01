@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const allChats = document.getElementById('allChats')
     const singleChat = document.getElementById('singleChat')
 
+    const urlParams = new URLSearchParams(window.location.search)
+    const email = urlParams.get('email')
+    const userId = urlParams.get('userId')
+
     fetch('/api/chats')
     .then(response => {
         if (!response.ok) {
@@ -17,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         chats.forEach(chat => {
             
+            if (userid !== userId) {
+
+            }
+
         })
     })
 })
