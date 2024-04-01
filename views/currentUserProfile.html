@@ -50,9 +50,13 @@
         <p><strong>Country:</strong> ${user.location.country}</p>
         <p><strong>Region:</strong> ${user.location.region}</p>
         <p><strong>Town:</strong> ${user.location.town}</p> `;
-        profilePic.src = data.user.imagePath;
-        heading.textContent = `${data.user.username}'s Profile`;
-
+        if (data.user.imagePath) {
+            profilePic.src = data.user.imagePath;
+          } else {
+            profilePic.src = './default_p.svg';
+          }
+          heading.textContent = `${data.user.username}'s Profile`;
+        
         })
         .catch(error => {
           console.error('Error fetching user profile:', error.message);

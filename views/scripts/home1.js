@@ -9,6 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
 
+    const userEmail = localStorage.getItem('email')
+    if (email === userEmail) {
+        profileLink.href = `./currentUserProfile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+    } else {
+        profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+    }
+
+
     fetch('/api/users/all')
         .then(response => {
             if (!response.ok) {
@@ -18,10 +26,20 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(data => {
             const users = data.users;
+
+    // setting profile image
+    const currentUser = users.find(user => user._id === userId);
+            if (currentUser) {
+                const defaultImagePath = '../default_p.svg';
+                const imagePath = currentUser.imagePath || defaultImagePath
+                profileImage.src = `../${imagePath}` 
+            }
+
             const defaultImagePath = '../default_p.svg';
 
             usersGrid.innerHTML = '';
             users.forEach(user => {
+                if (user._id != userId) {
                 const gridItem = document.createElement('div');
                 gridItem.classList.add('users-grid');
                 gridItem.setAttribute('user-id', user._id);
@@ -37,8 +55,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 gridItem.appendChild(userDetails);
 
                 usersGrid.appendChild(gridItem);
+                }
             });
-
+        
             usersGrid.querySelectorAll('.users-grid').forEach(div => {
                 div.addEventListener('click', () => {
                     const recipientId = div.getAttribute('user-id');
