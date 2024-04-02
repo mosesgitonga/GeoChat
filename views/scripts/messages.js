@@ -23,24 +23,30 @@ document.addEventListener('DOMContentLoaded', () => {
         chats.forEach(chat => {
             console.log('sender name', chat.senderName)
             console.log('username', chat.username)
-            if (chat.senderName != chat.username) {
-                if (!chats.includes(chat.senderName)) {
-                    chatNames.push(chat.senderName)
-                }
-            } else if (chat.receiverName === chat.username){
-                if (!chats.includes(chat.receiverName)){
-                    chatNames.push(chat.receiverName) 
-                }
+
+            let otherUser = ''
+            if (chat.senderName !== chat.username) {
+                otherUser = chat.senderName
+            } else if (chat.receiverName !== chat.username){
+                otherUser = chat.receiverName
             }
+
+            if (otherUser && !chatNames.includes(otherUser)) {
+                chatNames.push(otherUser);
+            }
+
             console.log(chatNames)
             allChats.textContent = ''
             chatNames.forEach(name => {
-                
                 const singleChat = document.createElement('div')
+                singleChat.classList.add('singleChat')
                 singleChat.textContent = name
                 allChats.append(singleChat)
+
+                singleChat.addEventListener('click', () => {
+                    window.location.href = `/chat-box.html?email=${email}&id=${chat.receiverId}&userId=${userId}`;
+                })
             })
-           
         })
     })
 })
