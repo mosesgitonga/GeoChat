@@ -108,7 +108,7 @@ main {
 
 .user-details {
     width: 50%;
-    
+    margin: 0 auto;
 }
 .users-grid {
     display: grid;

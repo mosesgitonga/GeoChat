@@ -19,7 +19,6 @@ class MessageServices {
     }
 
     // list all initiated chats involving a specific user.
-     
     static async allChats(username) {
         try {
             //getting distict combinationsof senderName and receiverName
@@ -31,7 +30,8 @@ class MessageServices {
 
             const initiatedChats = chats.map(chat => ({
                 senderName: chat._id.senderName,
-                receiverName: chat._id.receiverName
+                receiverName: chat._id.receiverName,
+                username,
             }))
 
             return initiatedChats

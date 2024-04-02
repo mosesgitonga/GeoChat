@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 gridItem.appendChild(image);
 
                 const userDetails = document.createElement('div');
-                userDetails.textContent = `${user.username} - ${user.location.country}-${user.location.region}-${user.location.town}`;
+                userDetails.textContent = `${user.username}`;
                 gridItem.appendChild(userDetails);
 
                 usersGrid.appendChild(gridItem);
