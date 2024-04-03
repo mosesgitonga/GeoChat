@@ -1,5 +1,7 @@
 # GeoChat
 
+![Homepage](https://github.com/mosesgitonga/GeoChat/raw/master/uploads/Screenshot%20from%202024-04-03%2020-56-59.png)
+
 ## Tables of Content
 - [Introduction](#introduction)
 - [Contributing](#contributing)
