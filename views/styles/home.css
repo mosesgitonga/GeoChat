@@ -21,7 +21,7 @@ img {
 }
 img:hover {
     border: 2px solid greenyellow;
-    transform: scale(1.5)
+    transform: scale(1.2)
 }
 a {
     text-decoration: none;
@@ -43,11 +43,36 @@ header {
 }
 
 .search-bar {
-    position: absolute;
-    margin-left: 60vh;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 20px 180px 20px 200px;
     bottom: 0;
 
 }
+
+input[type=text] {
+    width: 30%;
+    color: black;
+    padding: 12px 20px;
+    margin: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  button {
+    height: 50%;
+    font-size: 20px;
+    padding: 10px 20px;
+    margin: 8px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    background-color: #006080;
+  }
+
 
 .input {
     height: 30px;
@@ -101,7 +126,7 @@ nav ul li a img {
 
 /* Main Content Styles */
 main {
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
     text-align: center;
     margin-top: 120px;
 }
