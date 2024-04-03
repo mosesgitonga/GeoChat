@@ -12,7 +12,7 @@ body {
 }
 
 #menu {
-  background-color: #DC3C3C; 
+  background-color: #d85537; 
   color: white;
   padding: 20px 0;
 }
@@ -35,7 +35,7 @@ form input[type="password"] {
 }
 
 form button[type="submit"] {
-  background-color: #DC3C3C; 
+  background-color: #d85537; 
   color: white;
   padding: 10px 20px;
   border: none;

@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const messagesLink = document.querySelector('#chats');
     const usersGrid = document.getElementById('users-grid');
     const profileLink = document.querySelector('nav ul li:last-child a');
     const profileImage = document.querySelector('nav ul li:last-child a img')
@@ -12,7 +13,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search)
     const email = urlParams.get('email')
     const userId = urlParams.get('userId')
+
     
+    //messages.href = `./messages.html?userId=${userId}&email=${email}`
+    messagesLink.addEventListener('click', () => {
+        window.location.href = `messages.html?userId=${userId}&email=${email}`
+    })
+
+    const userEmail = localStorage.getItem('email')
+    if (email === userEmail) {
+        profileLink.href = `./currentUserProfile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+    } else {
+        profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
+    }
+
+    
+
+
     profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(userId)}`;
     
     let currentPage = 0;
@@ -41,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch users');
-                }
+		}
                 return response.json();
             })
 	    .then(data => {

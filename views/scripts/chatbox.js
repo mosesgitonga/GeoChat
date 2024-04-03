@@ -6,7 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const email = urlParams.get('email')
     const receiverId = urlParams.get('id')
     const senderId = urlParams.get('userId')
-  
+
+    //renaming senderId for a new variable, this so as not to touch existing code
+    const userId = senderId
+    
+
+
     profileLink.href = `./profile.html?email=${encodeURIComponent(email)}&userId=${encodeURIComponent(receiverId)}`;
 
 
@@ -38,19 +43,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
-    socket.on('getMessage', (data) => {
+    socket.on('getMessage', ({senderName, receiverName, message, time, senderId, receiverId}) => {
         const thread = document.getElementById('thread')
+       
+        const messageItem = document.createElement('div')
 
-        const messageItem = document.createElement('li')
-        messageItem.textContent = `sender: ${data.senderName} - message: ${data.message}`
+        messageItem.textContent = `${time}-${senderName}: ${message}`
+
+        //implementation of css class
+        if (senderId === userId) {
+            messageItem.classList.add('sender')
+         
+        } else if (receiverId === userId) {
+            messageItem.classList.add('receiver')
+        }
+       
         thread.appendChild(messageItem);
     });
 
     socket.on('previousMessages', function(previousMessages) {
         previousMessages.forEach(message => {
+            const div = document.createElement('div')
+            div.classList.add('message-div')
             const messageItem = document.createElement('li');
             messageItem.textContent = `sender ${message.senderName} - message ${message.message}`
-            thread.appendChild(messageItem)
+            console.log( 'id',message.senderId)
+            if (message.senderId === userId) {
+                messageItem.classList.add('sender');
+            } else if (message.receiverId === userId) {
+                messageItem.classList.add('receiver');
+            }
+
+            div.appendChild(messageItem);
+            thread.appendChild(div);
         })
     })
 })

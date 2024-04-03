@@ -1,5 +1,4 @@
-const redis = require('redis')
-
+const redis = require('redis');
 
 class RedisClient {
     constructor() {
@@ -7,65 +6,78 @@ class RedisClient {
             legacyMode: true,
             host: 'localhost',
             port: 5001
-        })
+        });
 
-        this.redisClient.connect()
+        // Connect to Redis server automatically upon creation
+        this.redisClient.on('connect', () => {
+            console.log('Redis Connected');
+        });
+
+        // Error handling for Redis connection
+        this.redisClient.on('error', (error) => {
+            console.error('Redis Error:', error);
+        });
     }
 
-    async connectRedis() {
-        return new Promise((resolve, reject) => {
-            this.redisClient.on('connect', () => {
-                console.log('Redis Connected')
-                resolve()
-            })
-
-            this.redisClient.on('error', (error) => {
-                console.error(error)
-                reject(error)
-            })
-        })
-    }
-
-    async set(key, value) {
-        return new Promise((resolve, reject) => {
-            this.redisClient.set(key, value, (err, reply) => {
-                if (err) {
-                    console.log(err)
-                    reject(err)
+    async set(key, value, expiry = null) {
+        try {
+            const result = await new Promise((resolve, reject) => {
+                if (expiry) {
+                    this.redisClient.set(key, value, 'EX', expiry, (err, reply) => {
+                        if (err) reject(err);
+                        else resolve(reply);
+                    });
                 } else {
-                    resolve(reply)
+                    this.redisClient.set(key, value, (err, reply) => {
+                        if (err) reject(err);
+                        else resolve(reply);
+                    });
                 }
-            })
-        })
+            });
+            return result;
+        } catch (error) {
+            console.error('Redis Set Error:', error);
+            throw error;
+        }
     }
 
-    async get(key, value) {
-        return new Promise((resolve, reject) => {
-            this.redisClient.get(key, (err, reply) => {
-                if (err) {
-                    console.log(err)
-                    reject(err)
-                } else {
-                    resolve(reply)
-                }
-            })
-        })
+    async get(key) {
+        try {
+            const result = await new Promise((resolve, reject) => {
+                this.redisClient.get(key, (err, reply) => {
+                    if (err) reject(err);
+                    else resolve(reply);
+                });
+            });
+            return result;
+        } catch (error) {
+            console.error('Redis Get Error:', error);
+            throw error;
+        }
     }
 
-    async addToBlackList(token) {
-        this.set(token, 'blacklisted', 'EX', 604800) // exp after 1 week
+    async addToBlacklist(token, expiry = 604800) {
+        try {
+            await this.set(token, 'blacklisted', expiry);
+        } catch (error) {
+            console.error('Redis Blacklist Error:', error);
+            throw error;
+        }
     }
 
-    async isTokenBlacklisted(token) {
-        return new Promise((resolve, reject) => {
-            this.redisClient.exists(token, (error, reply) => {
-                if (error) {
-                    reject(error)
-                } else {
-                    resolve(reply === 1) //token exists if reply exssts withh 1
-                }
-            })
-        })
+    isTokenBlacklisted(token) {
+        try {
+            const exists = new Promise((resolve, reject) => {
+                this.redisClient.exists(token, (error, reply) => {
+                    if (error) reject(error);
+                    else resolve(reply === 1);
+                });
+            });
+            return exists;
+        } catch (error) {
+            console.error('Redis Exists Error:', error);
+            throw error;
+        }
     }
 }
 

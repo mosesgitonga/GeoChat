@@ -86,10 +86,10 @@ class DbClient {
         }
     }
 
-    removeFilePath(email) {
+    async removeFilePath(email) {
         const path = ''
         try {
-            const user = User.findOneAndUpdate(
+            const user = await User.findOneAndUpdate(
                 {email: email},
                 { $set: {imagePath: path}},
                 {new: true}    

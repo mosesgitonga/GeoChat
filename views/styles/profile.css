@@ -1,8 +1,16 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #333;
     margin: 0;
     padding: 0;
+    display:  flex;
+   
+   
+  /*  position: absolute;*/
+    right: 0;
+    top: 0;
+   
+    width: 400px;;
 }
 
 #profile-image img {
@@ -13,10 +21,15 @@ body {
 .container {
     max-width: 800px;
     margin: 50px auto;
-    background-color: #fff;
+    background-color: #9fa18e92;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: whitesmoke ;
+    min-width: 500px;
+    margin-top: 0;
+    position: absolute;
+
 }
 
 h1 {

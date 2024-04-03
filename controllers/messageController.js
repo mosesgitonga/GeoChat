@@ -1,5 +1,8 @@
 const Message = require('../models/messages');
-const MessageServices = require('../services/messageService')
+const MessageServices = require('../services/messageService');
+const DbClient = require('../utils/db');
+const dbClient = new DbClient
+
 class MessageController {
   static async saveMessage(senderName, receiverName, message) {
       if (!message) {
@@ -49,6 +52,32 @@ class MessageController {
     } catch(error) {
       console.log(error)
 
+    }
+  }
+
+  static async getAllChatsForUser(req, res) {
+    const { email } = req.cookies
+    if (!email) {
+      console.log('no email found in cookies')
+    }
+    console.log('email found', email)
+    const user = await dbClient.getUserByEmail(email)
+    if (!user) {
+      console.log('no user found')
+    } 
+    console.log('user found', user)
+    const username = user.username
+    try {
+      const initiatedChats = await MessageServices.allChats(username)
+      if (!initiatedChats) {
+        console.log('unable to get initiated chats')
+        return
+      }
+
+      res.status(200).json({ initiatedChats })
+    } catch(error) {
+      console.log('error when getting initiated chats',error)
+      res.status(500).json({ error: 'Failed to retrive initiated chats'})
     }
   }
 }

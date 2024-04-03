@@ -35,7 +35,6 @@ class AuthController {
                 return
             }
 
-       
             const hashedPassword = user.password
             const passwordMatch = await bcrypt.compare(password, hashedPassword);
             if (!passwordMatch) {
@@ -51,7 +50,8 @@ class AuthController {
             const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET_TOKEN, {expiresIn: '1w'})
 
             req.session.userId = user._id
-
+            req.session.username = user.username
+            
             setAccessTokenCookie(res, accessToken, user.email)
             console.log('The user made it to the homepage')
             res.status(200).json({ message: 'login is successful', userId: user._id})         

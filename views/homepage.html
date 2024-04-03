@@ -13,21 +13,28 @@
         <div class="logo">
             <h1>GeoChat</h1>
         </div>
-        <nav>
-            <ul>
-                <li><a href="./chat-box.html"><img src="home-icon.png" alt="Chat Room"></a></li>
-                <li><a href="#"><img src="home-icon.png" alt="Home Icon"></a></li>
-                <li><a href="#"><img src="group-pic.png" alt="Group Pic"></a></li>
-                <li id="profile-icon"><a href="#"><img src="profile-icon.png" alt="Profile Icon"></a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
         <section class="search-bar">
 	    <input type="text" id="search-input-country" placeholder="Country">
             <input type="text" id="search-input-region" placeholder="Region">
             <input type="text" id="search-input-town" placeholder="Town">
 	    <button id="search-button">Search</button>
+        </section>
+        <div class="nav-links">
+            <nav>
+                <ul>
+                    <li><a href="#"><img src="home1.jpeg" alt="Home icon"></a></li>
+                    <li id="chats"><a ><img src="./chatsIcon.png" alt="Chats"></a></li>
+                    <li><a href="#"><img src="group-pic.png" alt="Group Pic"></a></li>
+                    <li id="profile-icon"><a href="#"><img src="default_p.svg" alt="Profile Icon"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="users-grid" id="users-grid">
+             
         </section>
         <section class="users-grid" id="users-grid"></section>
 	<!-- Pagination controls -->
@@ -37,7 +44,7 @@
         </div>
     </main>
     
-    <script src="./scripts/home.js"></script>
+    <script src="./scripts/home1.js"></script>
 </body>
 
 </html>

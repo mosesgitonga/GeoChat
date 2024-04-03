@@ -1,88 +1,82 @@
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family:'Courier New', Courier, monospace;
+  box-sizing: border-box;
 }
-
-/* Global Styles */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
-}
-
-.container {
-  max-width: 600px;
-  margin: 20px auto;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-.profile-link {
-  margin-bottom: 20px;
-}
-
-.profile-link img {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
-
-.profile-link a {
-  color: #385898;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.profile-link a:hover {
-  text-decoration: underline;
-}
-
-#messageForm {
+  background-color: #333;
   display: flex;
-  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container {
+  width: 450px;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 2px 20px rgba(0,0,0,4);
+  
 }
 
-#messageInput {
+.body {
   flex: 1;
+  color: white;
+  background-color: #333; 
+  padding: 20px 20px;
+}
+
+.receiver {
+  background-color: rgb(172, 92, 92);
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+  color: white;
+  width: fit-content;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  margin: 10px 0 10px 0;
+
 }
 
-#messageInput:focus {
-  outline: none;
-  border-color: #385898;
+.sender {
+  padding: 10px;
+  margin-left: auto;
+  background-color: rgb(165, 119, 63);
+  color: white;
+  float: right;
+  margin-bottom: 15px;
+  margin-top: 15px;
+  margin: 10px 0 10px 0;
+  width: fit-content;
+  overflow:visible;
 }
 
-#messageForm button {
-  background-color: #385898;
-  color: #fff;
+.footer form {
+  display: flex;
+}
+
+form input {
+  flex: 1;
+  height: 40px;
   border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  margin-left: 10px;
+  outline: none;
+  padding-left: 5px;
+  font-size: 16px;
+  border-radius: 20px;
+}
+
+form button {
+  width: 100px;
+  font-size: 18px;
+  border: none;
+  background-color: #d26928;
   cursor: pointer;
+  border-radius: 20px;
 }
 
-#messageForm button:hover {
-  background-color: #2d4373;
-}
-
-#thread {
-  list-style-type: none;
-}
-
-#thread li {
-  background-color: #f0f2f5;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-#thread li:last-child {
-  margin-bottom: 0;
+form button:hover {
+  background-color: #333;
+  border: 2px solid #d26928;
+  color:rgb(165, 119, 63);
+  transition: 0.3s ease;
 }

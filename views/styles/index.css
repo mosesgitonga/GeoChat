@@ -13,7 +13,7 @@ body {
 
 /* Header Styles */
 .header {
-    background-color: #DC3C3C; /* Orange */
+    background-color: #d85537; /* Orange */
     color: rgb(236, 230, 230);
     padding: 20px 0;
 }
@@ -89,15 +89,15 @@ body {
     width: 45%;
     padding: 20px;
     text-align: center;
-    background-color: #DC3C3C; /* Light orange */
+    background-color: #d85537; /* Light orange */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 .info-box p {
-    color: #5adf17; /* Brown */
+    color: #5adf17; 
 }
 
-/* Testimonial Section Styles */
+
 .testimonial {
     text-align: center;
     padding: 40px 0;
@@ -111,7 +111,7 @@ body {
 
 /* Call to Action Section Styles */
 .cta {
-    background-color: #DC3C3C; /* Orange */
+    background-color: #d85537; /* Orange */
     color: white;
     text-align: center;
     padding: 60px 0;
@@ -132,11 +132,11 @@ body {
 }
 
 .btn:hover {
-    background-color: #DC3C3C; /* Lighter orange on hover */
+    background-color: #d85537; /* Lighter orange on hover */
 }
 
 footer {
-    background-color: #DC3C3C; /* Orange */
+    background-color: #d85537; /* Orange */
     color: white;
     text-align: center;
     padding: 20px 0;
