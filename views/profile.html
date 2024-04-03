@@ -59,30 +59,6 @@
         });
         
     });
-
-    //handling image upload
-    document.getElementById("uploadForm").addEventListener('submit', async (event) => {
-      event.preventDefault();
-      const formData = new FormData();
-      formData.append('image', document.getElementById('image-input').files[0]);
-      try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData
-        });
-        if (!response.ok) {
-          throw new Error('Failed to upload image');
-        }
-        const data = await response.json();
-        if (!data) {
-          document.getElementById('message').textContent = 'Refresh the page to see changes';
-        }
-        document.getElementById('message').textContent = 'Image uploaded successfully. Refresh the page to see changes';
-      } catch(error) {
-        console.error('Error uploading image:', error.message);
-        document.getElementById('message').textContent = 'Error uploading image';
-      }
-    });
   </script>
 </body>
 </html>

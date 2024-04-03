@@ -21,8 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const chats = data.initiatedChats
 
         chats.forEach(chat => {
-            console.log('sender name', chat.senderName)
+            console.log('sender name', chat.senderName, chat.senderId)
             console.log('username', chat.username)
+            console.log('receiver name', chat.receiverName, chat.receiverId)
+            const receiverId = chat.receiverId
 
             let otherUser = ''
             if (chat.senderName !== chat.username) {
@@ -35,18 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 chatNames.push(otherUser);
             }
 
-            console.log(chatNames)
-            allChats.textContent = ''
-            chatNames.forEach(name => {
-                const singleChat = document.createElement('div')
-                singleChat.classList.add('singleChat')
-                singleChat.textContent = name
-                allChats.append(singleChat)
+            const singleChat = document.createElement('div')
+            singleChat.classList.add('singleChat')
+            singleChat.textContent = otherUser
+            allChats.append(singleChat)
 
-                singleChat.addEventListener('click', () => {
-                    window.location.href = `/chat-box.html?email=${email}&id=${chat.receiverId}&userId=${userId}`;
-                })
-            })
+            // Add event listener with closure to capture the correct receiverId
+            singleChat.addEventListener('click', ((id) => {
+                return () => {
+                    window.location.href = `/chat-box.html?email=${email}&id=${id}&userId=${userId}`;
+                };
+            })(receiverId));
         })
     })
 })

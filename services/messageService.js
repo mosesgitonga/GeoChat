@@ -28,19 +28,23 @@ class MessageServices {
             const chats = await Message.aggregate([
                 { $match: {$or: [{senderName: username}, {receiverName: username}]}},
                 { $group: { _id: {senderName: '$senderName', receiverName: '$receiverName'}}},
-                { $sort: { '_id.timestamp': -1}}
-
+  
             ])
 
             const initiatedChats = []
+            console.log(chats)
             for (const chat of chats) {
-                console.log('receiver name', chat._id.receiverName)
+                console.log('receiver name', chat._id.senderName)
                 //for (const receiver of chat._id.receiverName) {
                     const receiverUsername = await dbClient.getUserByUsername(chat._id.receiverName);
+                    const senderUsername = await dbClient.getUserByUsername(chat._id.senderName);
+                    console.log('receiver username', receiverUsername)
+                    console.log('sender username', senderUsername)
                     initiatedChats.push({
                         senderName: chat._id.senderName,
                         receiverName: chat._id.receiverName,
                         username,
+                        senderId: senderUsername._id,
                         receiverId: receiverUsername._id
                     });
                 //}
