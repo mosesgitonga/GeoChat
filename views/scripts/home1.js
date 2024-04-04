@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         // Appended the image
                         const image = document.createElement('img');
-		        const imagePath = user.imagePath || defaultImagePath;
+		                const imagePath = user.imagePath || defaultImagePath;
                         image.src = `../${imagePath}`;
                         gridItem.appendChild(image);
 
