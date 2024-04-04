@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     display:  flex;
-   
+
    
   /*  position: absolute;*/
     right: 0;
@@ -38,4 +38,14 @@ h1 {
 
 #profile-info {
     margin-top: 20px;
+}
+
+.logout {
+    background-color: rgb(209, 55, 55);
+    margin-top: 50px;
+    height: 70px;
+    width: 80px;
+    border-radius: 20px;
+    text-decoration: none;
+    text-align: center;
 }
