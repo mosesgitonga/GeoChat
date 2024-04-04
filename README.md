@@ -1,6 +1,6 @@
 # GeoChat
 
-![Homepage](https://github.com/mosesgitonga/GeoChat/raw/master/uploads/'Screenshot from 2024-04-03 20-56-59.png')
+![Homepage](uploads/'Screenshot from 2024-04-03 20-56-59.png')
 
 ## Tables of Content
 - [Introduction](#introduction)
