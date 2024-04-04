@@ -6,25 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoChat - Home</title>
     <link rel="stylesheet" href="./styles/home.css">
+    <link rel="shortcut icon" href="./images/icon.svg">
 </head>
 
 <body>
     <header>
         <div class="logo">
-            <h1>GeoChat</h1>
+            <a href="./#"><img src="./images/signup.png" alt="Home icon" style="width:70px; height:70px"></a>
         </div>
         <section class="search-bar">
-            <input class="input" type="text" placeholder="Search by country name, region, or town">
+            <input type="text" id="search-input-country" placeholder="Country">
+            <input type="text" id="search-input-region" placeholder="Region">
+            <input type="text" id="search-input-town" placeholder="Town">
+            <button id="search-button">Search</button>
         </section>
         <div class="nav-links">
             <nav>
                 <ul>
-                    <li><a href="#"><img src="home1.jpeg" alt="Home icon"></a></li>
-                    <li id="chats"><a ><img src="./chatsIcon.png" alt="Chats"></a></li>
-                    <li><a href="#"><img src="group-pic.png" alt="Group Pic"></a></li>
-                    <li id="profile-icon"><a href="#"><img src="profile-icon.png" alt="Profile Icon"></a></li>
+                    <li id="chats"><a ><img src="./images/chatsIcon.png" alt="Chats" style="width:70px; height:70px"></a></li> 
+                    <!-- <li><a href="#"><img src="group-pic.png" alt="Group Pic"></a></li> -->
+                    <li id="profile-icon"><a href="#"><img src="default_p.svg" alt="Profile Icon"></a></li>
+                    
                 </ul>
             </nav>
+    
         </div>
     </header>
 
@@ -33,9 +38,15 @@
         <section class="users-grid" id="users-grid">
              
         </section>
+        <section class="users-grid" id="users-grid"></section>
+	<!-- Pagination controls -->
+        <div class="pagination">
+            <button id="prev-page">Previous</button>
+            <button id="next-page">Next</button>
+        </div>
     </main>
     
-    <script src="./scripts/home.js"></script>
+    <script src="./scripts/home1.js"></script>
 </body>
 
 </html>

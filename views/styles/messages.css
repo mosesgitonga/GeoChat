@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+header {
+    color: #ce420b;
+    text-align: center;
+}
+
+
+.allChats {
+    background-color: #333;
+    color: whitesmoke;
+    justify-content: center;
+    border: 2px solid #333;
+    margin: 18px 0 18px 0;
+    padding: 20px;
+    width: 200vh;
+}
+
+.singleChat {
+    
+    background-color: whitesmoke;
+    color: #333;
+    height: 30px;
+    text-align: center;
+    text-shadow: #ce420b;
+}
+
+.singleChat:hover {
+    background-color: #ce420b;
+    color: whitesmoke;
+}

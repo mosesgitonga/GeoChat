@@ -158,14 +158,15 @@ class UsersController {
 
     static async listUsersByCountry(req, res) {
       try {
-        const { country, page } = req.query;
-        const pageNum = page || 0;
+	const { country, page } = req.query;
+        const pageNum = page || 1;
         const limit = 10;
 
         if(!country) {
           return res.status(400).json({ error: 'Country parameter is required' });
         }
-        const pageNumber = parseInt(page);
+
+        const pageNumber = parseInt(pageNum);
         const skip = pageNumber * limit;
 
         const usersByCountry = await User.aggregate([
@@ -173,9 +174,9 @@ class UsersController {
           { $sample: { size: limit } },
           { $skip: skip },
           { $limit: limit }
-        ]);
+          ]);
 
-        res.json(usersByCountry);
+        res.json({ users: usersByCountry });
       } catch (error) {
           console.error('Error fetching users:', error);
           res.status(500).json({ error: 'Internal server error' });
@@ -184,17 +185,17 @@ class UsersController {
 
     static async listUsersByRegion(req, res) {
       try {
-        const { country, region, page } = req.query;
+	const { country, region, page } = req.query;
         const pageNum = page || 0;
         const limit = 10;
 
         if(!country || !region) {
           return res.status(400).json({ error: 'Country and region parameter are required' });
         }
-        const pageNumber = parseInt(page);
+        const pageNumber = parseInt(pageNum);
         const skip = pageNumber * limit;
-
-        const usersByRegion = await User.aggregate([
+       
+	const usersByRegion = await User.aggregate([
           { $match: {
  	    'location.country': { $regex: new RegExp(country, 'i') },
 	    'location.region': { $regex: new RegExp(region, 'i') },
@@ -204,7 +205,7 @@ class UsersController {
           { $limit: limit }
         ]);
 
-        res.json(usersByRegion);
+        res.json({ users: usersByRegion });
       } catch (error) {
           console.error('Error fetching users:', error);
           res.status(500).json({ error: 'Internal server error' });
@@ -213,28 +214,28 @@ class UsersController {
 
     static async listUsersByTown(req, res) {
       try {
-        const { country, region, town, page } = req.query;
+	const { country, region, town, page } = req.query;
         const pageNum = page || 0;
         const limit = 10;
 
         if(!country || !region || !town) {
           return res.status(400).json({ error: 'Country, region and town parameter are required' });
         }
-        const pageNumber = parseInt(page);
+        const pageNumber = parseInt(pageNum);
         const skip = pageNumber * limit;
 
         const usersBytown = await User.aggregate([
           { $match: {
 	    'location.country': { $regex: new RegExp(country, 'i') },
 	    'location.region': { $regex: new RegExp(region, 'i') },
-	    'location.town': { $regex: new RegExp(country, 'i') }
+	    'location.town': { $regex: new RegExp(town, 'i') }
 	  } },
           { $sample: { size: limit } },
           { $skip: skip },
           { $limit: limit }
         ]);
 
-        res.json(usersBytown);
+        res.json({ users: usersBytown });
       } catch (error) {
           console.error('Error fetching users:', error);
           res.status(500).json({ error: 'Internal server error' });

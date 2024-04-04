@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GeoChat user profile</title>
   <link rel="stylesheet" href="./styles/profile.css">
+  <link rel="shortcut icon" href="./images/icon.svg">
 </head>
 <body>
   <div id="message" style="color: rgb(252, 202, 5)"></div>
@@ -20,6 +21,7 @@
         </form>
       </div>
       <div id="profile-info"></div>
+      <div class="logout"><a href="./#"><img src="./images/logout.png" alt="Logout" style="width:70px; height:70px"></a> </div>
     </div>
   </div>
 
@@ -46,13 +48,17 @@
             <p><strong>Username:</strong> ${user.username}</p>
 	          <p><strong>Email:</strong> ${user.email}</p>
             <p><strong>Course:</strong> ${user.course}</p>
-        <p><strong>Cohort:</strong> ${user.cohort}</p>
-        <p><strong>Country:</strong> ${user.location.country}</p>
-        <p><strong>Region:</strong> ${user.location.region}</p>
-        <p><strong>Town:</strong> ${user.location.town}</p> `;
-        profilePic.src = data.user.imagePath;
-        heading.textContent = `${data.user.username}'s Profile`;
-
+            <p><strong>Cohort:</strong> ${user.cohort}</p>
+            <p><strong>Country:</strong> ${user.location.country}</p>
+            <p><strong>Region:</strong> ${user.location.region}</p>
+            <p><strong>Town:</strong> ${user.location.town}</p> `;
+        if (data.user.imagePath) {
+            profilePic.src = data.user.imagePath;
+          } else {
+            profilePic.src = './default_p.svg';
+          }
+          heading.textContent = `${data.user.username}'s Profile`;
+        
         })
         .catch(error => {
           console.error('Error fetching user profile:', error.message);

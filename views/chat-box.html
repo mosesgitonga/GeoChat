@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat</title>
   <link rel="stylesheet" href="./styles/chatbox.css">
+  <link rel="shortcut icon" href="./images/icon.svg">
 </head>
 <body>
     <div class="container">
         <div class="profile-link">
             <a href="">
-                <img src="profile-pic.jpg" alt="Profile Picture">
+                <img id="profile-pic" src="" alt="Profile Picture">
                 View Profile
             </a>
         </div>
@@ -28,6 +29,7 @@
     </div>
     
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> 
+    <script src="./scripts/default_pp.js"></script>
     <script src="./scripts/chatbox.js"></script>
 </body>
 </html>

@@ -9,19 +9,26 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  /*margin: 50px 350px 50px 350px;*/
 }
 
 #menu {
   background-color: #d85537; 
+  height: 90px;
   color: white;
   padding: 20px 0;
 }
 
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 
 .container h2 {
   font-size: 2rem;
   margin-bottom: 20px;
-  color: #b2e335; 
+  color: #b2e335;
 }
 
 form input[type="text"],

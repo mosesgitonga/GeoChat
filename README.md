@@ -14,7 +14,7 @@ ALX(african Leadership X) is an online bootcamp for students from all over afric
 ## Contributing
 Moses gitonga - infosec947@gmail.com
 
-Kelechi
+Arukwe Kelechi Denise - kelechi.denise@yahoo.com
 
 saheed
 

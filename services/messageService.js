@@ -1,4 +1,7 @@
 const Message = require('../models/messages')
+const DbClient = require('../utils/db')
+
+const dbClient = new DbClient
 
 class MessageServices {
     static async getPreviousMessages(senderName, receiverName) {
@@ -19,20 +22,34 @@ class MessageServices {
     }
 
     // list all initiated chats involving a specific user.
-     
     static async allChats(username) {
         try {
             //getting distict combinationsof senderName and receiverName
             const chats = await Message.aggregate([
                 { $match: {$or: [{senderName: username}, {receiverName: username}]}},
-                { $group: { _id: {senderName: '$senderName', receiverName: '$receiverName'}}}
-
+                { $group: { _id: {senderName: '$senderName', receiverName: '$receiverName'}}},
+  
             ])
 
-            const initiatedChats = chats.map(chat => ({
-                senderName: chat._id.senderName,
-                receiverName: chat._id.receiverName
-            }))
+            const initiatedChats = []
+            console.log(chats)
+            for (const chat of chats) {
+                console.log('receiver name', chat._id.senderName)
+                //for (const receiver of chat._id.receiverName) {
+                    const receiverUsername = await dbClient.getUserByUsername(chat._id.receiverName);
+                    const senderUsername = await dbClient.getUserByUsername(chat._id.senderName);
+                    console.log('receiver username', receiverUsername)
+                    console.log('sender username', senderUsername)
+                    initiatedChats.push({
+                        senderName: chat._id.senderName,
+                        receiverName: chat._id.receiverName,
+                        username,
+                        senderId: senderUsername._id,
+                        receiverId: receiverUsername._id
+                    });
+                //}
+              
+            }
 
             return initiatedChats
         } catch(error) {
