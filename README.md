@@ -14,8 +14,11 @@ ALX(african Leadership X) is an online bootcamp for students from all over afric
 
 ## Technologies
 Backend - nodejs, express
+
 frontend - vanilla js, html, css
+
 Storage - mongodb, redis
+
 Libraries - Socket.io to facilate live messaging
 
 ## Contributing
