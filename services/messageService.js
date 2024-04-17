@@ -40,6 +40,8 @@ class MessageServices {
                     const senderUsername = await dbClient.getUserByUsername(chat._id.senderName);
                     console.log('receiver username', receiverUsername)
                     console.log('sender username', senderUsername)
+                    console.log('sender Id ', senderUsername._id)
+                    console.log('receiver Id ', receiverUsername._id)
                     initiatedChats.push({
                         senderName: chat._id.senderName,
                         receiverName: chat._id.receiverName,

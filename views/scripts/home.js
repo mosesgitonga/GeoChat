@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search)
     const email = urlParams.get('email')
     const userId = urlParams.get('userId')
-
+    
     
     //messages.href = `./messages.html?userId=${userId}&email=${email}`
     messagesLink.addEventListener('click', () => {

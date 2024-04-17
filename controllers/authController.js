@@ -8,14 +8,19 @@ const dbClient = new DbClient();
 const redisClient = new RedisClient()
 
 const setAccessTokenCookie = (res, token, email) => {
-    const options = {
+    const strictOptions = {
         httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    }
+    const notStrictOptions = {
+        httpOnly: false,
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000 //1 week
         }
 
-    res.cookie('accessToken', token, options)
-    res.cookie('email', email, options)
+    res.cookie('accessToken', token, strictOptions)
+    res.cookie('email', email, notStrictOptions)
 }
 
 class AuthController {
