@@ -53,9 +53,6 @@ class AuthController {
                 email: user.email
             }
             const accessToken = jwt.sign(payload, process.env.ACCESS_SECRET_TOKEN, {expiresIn: '1w'})
-
-            req.session.userId = user._id
-            req.session.username = user.username
             
             setAccessTokenCookie(res, accessToken, user.email)
             console.log('The user made it to the homepage')
