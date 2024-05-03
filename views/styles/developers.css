@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+}
+
+body {
+    background-color: #333;
+    color: white;
+}
+header {
+    background-color: #d85537;
+    display: flex;
+    justify-content: space-between;
+    color: white;
+}
+.developers-container {
+    display: flex;
+    background-color: #5adf17;
+    margin: 2px;
+    justify-content: space-between;
+}
+.moses, .kelechi, .tolulope {
+    border: 2px solid #d85537;
+    width: 300px;
+    height: 400px;
+    border-radius: 18%;
+    border: 2px solid white;
+    text-align: center;
+    margin: 30px;
+    background-color: #d85537;
+    color: white;
+}
+
+.describe-myself {
+    position: relative;
+    padding: 10px;
+    font-size: medium;
+    font-style: italic;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
