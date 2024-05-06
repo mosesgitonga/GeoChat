@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 otherUser = chat.receiverName;
             }
             
-            if (otherUser && !chatNames.has(otherUser)) {
+            if (!otherUser && !chatNames.has(otherUser)) {
                 chatNames.add(otherUser);
             }
         
