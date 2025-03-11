@@ -36,18 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const region = searchInputRegion.value.trim();
         const town = searchInputTown.value.trim();
 
-        let endpoint; 
+        let endpoint;
 
-	if (country && region && town) {
+        if (country && region && town) {
             endpoint = `/api/users/country/region/town?country=${encodeURIComponent(country)}&region=${encodeURIComponent(region)}&town=${encodeURIComponent(town)}&page=${currentPage}`;
         } else if (country && region) {
             endpoint = `/api/users/country/region?country=${encodeURIComponent(country)}&region=${encodeURIComponent(region)}&page=${currentPage}`;
         } else if (country) {
             endpoint = `/api/users/country?country=${encodeURIComponent(country)}&page=${currentPage}`;
         } else {
-            // If no parameters provided, fetch all users
             fetchAllUsers();
-	    return;
+            return;
         }
 
         fetch(endpoint)
@@ -57,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return response.json();
             })
-	    .then(data => {
-	        const users = data.users
-                localStorage.setItem( 'id', users._id)
+            .then(data => {
+                const users = data.users
+                localStorage.setItem('id', users._id)
 
                 // Clear users grid
                 usersGrid.innerHTML = '';
@@ -71,30 +70,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         gridItem.classList.add('users-grid');
                         gridItem.setAttribute('user-id', user._id);
 
-                        // Appended the image
                         const image = document.createElement('img');
-		                const imagePath = user.imagePath || defaultImagePath;
+                        const imagePath = user.imagePath || defaultImagePath;
                         image.src = `../${imagePath}`;
                         gridItem.appendChild(image);
 
                         const userDetails = document.createElement('div');
                         userDetails.textContent = `${user.username} - ${user.location.country}-${user.location.region}-${user.location.town}`;
                         gridItem.appendChild(userDetails);
-                    
-		        usersGrid.appendChild(gridItem);
-		    }
+
+                        usersGrid.appendChild(gridItem);
+                    }
                 });
-		
+
                 usersGrid.querySelectorAll('.users-grid').forEach(div => {
                     div.addEventListener('click', () => {
                         const recipientId = div.getAttribute('user-id')
                         window.location.href = `/chat-box.html?email=${email}&id=${encodeURIComponent(recipientId)}&userId=${encodeURIComponent(userId)}`
-		    })
-		})
-	    })
-	    .catch(error => {
-            console.error('Error fetching users:', error);
-        });
+                    })
+                })
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+            });
 
     };
 
@@ -112,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchUsers();
     });
 
-    // Function to fetch all users
     const fetchAllUsers = () => {
         fetch('/api/users/all')
             .then(response => {
@@ -124,38 +121,32 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 const users = data.users;
 
-                usersGrid.innerHTML = '';
-                users.forEach(user => {
-                    if (user._id != userId) {
-                        const gridItem = document.createElement('div');
-                        gridItem.classList.add('users-grid');
-                        gridItem.setAttribute('user-id', user._id);
+                usersGrid.innerHTML = users
+                    .filter(user => user._id != userId)
+                    .map(user => `
+                        <div class="user">
+                            <div class="users-grid" user-id="${user._id}">
+                                <img src="../${user.imagePath || defaultImagePath}" alt="User Image">
+                            </div>
+                            <div class="actions">
+                                <div >${user.username}</div>
+                                <button>See Profile</button>
+                            </div>
+                        </div>
+                    `).join('');
 
-                        // Appending the image
-                        const image = document.createElement('img');
-                        const imagePath = user.imagePath || defaultImagePath;
-                        image.src = `../${imagePath}`;
-                        gridItem.appendChild(image);
-
-                        const userDetails = document.createElement('div');
-                        userDetails.textContent = `${user.username}`;
-                        gridItem.appendChild(userDetails);
-
-                        usersGrid.appendChild(gridItem);
-                    }
-                });
-        
                 usersGrid.querySelectorAll('.users-grid').forEach(div => {
                     div.addEventListener('click', () => {
                         const recipientId = div.getAttribute('user-id');
                         window.location.href = `/chat-box.html?email=${email}&id=${encodeURIComponent(recipientId)}&userId=${encodeURIComponent(userId)}`;
-		    });
-		});
-	    })
+                    });
+                });
+            })
             .catch(error => {
                 console.error('Error fetching users:', error);
-	    });
+            });
     };
+
 
     fetchAllUsers();
 
@@ -163,10 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`/api/user/profile/${userId}`)
         .then(response => response.json())
         .then(data => {
-	    const imagePath = data.user.imagePath || defaultImagePath;
-	    profileImage.src = `../${imagePath}`;
-	})
+            const imagePath = data.user.imagePath || defaultImagePath;
+            profileImage.src = `../${imagePath}`;
+        })
         .catch(error => {
-           console.error('Error fetching user profile:', error);
+            console.error('Error fetching user profile:', error);
         });
 });

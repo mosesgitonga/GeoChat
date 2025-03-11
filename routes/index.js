@@ -32,7 +32,8 @@ const injectRoutes = () => {
     router.get('/login', authenticateToken, (req, res) => {
         res.render('login'); 
       });
-    router.post('/logout',authenticateToken, async (req, res) => await AuthController.logout(req, res))
+    router.use(authenticateToken)
+    router.post('/logout', async (req, res) => await AuthController.logout(req, res))
     router.post('/upload', fileController.handleImageUpload.bind(fileController));
     router.get('/chats', MessageController.getAllChatsForUser)
 

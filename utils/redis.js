@@ -8,6 +8,7 @@ class RedisClient {
             port: 5001
         });
 
+        this.redisClient.connect()
         // Connect to Redis server automatically upon creation
         this.redisClient.on('connect', () => {
             console.log('Redis Connected');
@@ -56,7 +57,7 @@ class RedisClient {
         }
     }
 
-    async addToBlacklist(token, expiry = 604800) {
+    async addToBlacklist(token, expiry=604800) {
         try {
             await this.set(token, 'blacklisted', expiry);
         } catch (error) {
@@ -65,14 +66,16 @@ class RedisClient {
         }
     }
 
-    isTokenBlacklisted(token) {
+    async isTokenBlacklisted(token) {
         try {
             const exists = new Promise((resolve, reject) => {
+                console.log('ksksk')
                 this.redisClient.exists(token, (error, reply) => {
-                    if (error) reject(error);
+                    if (error) reject( error);
                     else resolve(reply === 1);
                 });
-            });
+            })
+     
             return exists;
         } catch (error) {
             console.error('Redis Exists Error:', error);
