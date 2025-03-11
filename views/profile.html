@@ -1,65 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"> 
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoChat user profile</title>
+  <title>GeoChat User Profile</title>
   <link rel="stylesheet" href="./styles/profile.css">
   <link rel="shortcut icon" href="./images/icon.svg">
 </head>
+
 <body>
-  
-  <div class="container">
-    <div>
-      <h1 id="heading"></h1>
-      <div id="profile-image">
+  <div class="profile-container">
+    <div class="profile-sidebar">
+      <div class="profile-image">
         <img id="profile-pic" src="" alt="Profile Picture">
       </div>
-      <div id="message" style="color: rgb(252, 202, 5)"></div>
-      <div id="profile-info"></div>
+      <h2 id="heading"></h2>
+    </div>
+
+    <div class="profile-details">
+      <div id="message"></div>
+      <div class="details-grid">
+        <p><strong>Email:</strong> <span id="email"></span></p>
+        <p><strong>Course:</strong> <span id="course"></span></p>
+        <p><strong>Cohort:</strong> <span id="cohort"></span></p>
+        <p><strong>Location:</strong> <span id="location"></span></p>
+      </div>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const profileInfo = document.getElementById('profile-info');
+      const heading = document.getElementById('heading');
       const profilePic = document.getElementById('profile-pic');
-      const heading = document.getElementById('heading')
+      const email = document.getElementById('email');
+      const course = document.getElementById('course');
+      const cohort = document.getElementById('cohort');
+      const location = document.getElementById('location');
 
-      const urlParams = new URLSearchParams(window.location.search); 
-      const userEmail = urlParams.get('email');
+      const urlParams = new URLSearchParams(window.location.search);
       const userId = urlParams.get('userId');
+
       fetch(`/api/user/profile/${userId}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Failed to fetch user profile');
-          }
-          return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-          console.log(data);
           const user = data.user;
-          profileInfo.innerHTML = `
-            <p><strong>Username:</strong> ${user.username}</p>
-            <p><strong>Email:</strong> ${user.email}</p>
-            <p><strong>Course:</strong> ${user.course}</p>
-            <p><strong>Cohort:</strong> ${user.cohort}</p>
-            <p><strong>Country:</strong> ${user.location.country}</p>
-            <p><strong>Region:</strong> ${user.location.region}</p>
-            <p><strong>Town:</strong> ${user.location.town}</p>`;
-          if (data.user.imagePath) {
-            profilePic.src = data.user.imagePath;
-          } else {
-            profilePic.src = './default_p.svg';
-          }
-          heading.textContent = `${data.user.username}'s Profile`;
+          heading.textContent = `${user.username}'s Profile`;
+          email.textContent = user.email;
+          course.textContent = user.course;
+          cohort.textContent = user.cohort;
+          location.textContent = `${user.location.town}, ${user.location.region}, ${user.location.country}`;
+          profilePic.src = user.imagePath || './default_p.svg';
         })
         .catch(error => {
           console.error('Error fetching user profile:', error.message);
-          profileInfo.innerHTML = '<p>Error fetching user profile</p>';
         });
-        
     });
   </script>
 </body>
+
 </html>

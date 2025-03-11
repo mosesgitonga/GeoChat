@@ -1,27 +1,31 @@
-<!-- profile.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GeoChat user profile</title>
+  <title>GeoChat User Profile</title>
   <link rel="stylesheet" href="./styles/profile.css">
   <link rel="shortcut icon" href="./images/icon.svg">
 </head>
 <body>
-  <div id="message" style="color: rgb(252, 202, 5)"></div>
+  <div id="message" class="message"></div>
   <div class="container">
-    <div>
+    <div class="profile-section">
       <h1 id="heading"></h1>
-      <div id="profile-image">
-        <img id="profile-pic" src="" alt="Profile Picture">
-        <form id="uploadForm" enctype="multipart/form-data" style="color: #333; background-color: #eeeeee;">
-            <input type="file" name="image" id="image-input" accept="image/*">
-            <button type="submit">Upload</button>
-        </form>
+      <div class="flex-container" style="display: flex; margin: 20px;">
+        <div id="profile-image">
+          <img id="profile-pic" src="" alt="Profile Picture">
+          <form id="uploadForm" enctype="multipart/form-data">
+              <input type="file" name="image" id="image-input" accept="image/*">
+              <button type="submit" class="upload-btn">Upload Image</button>
+          </form>
+        </div>
+        <div id="profile-info" class="profile-info" style="margin-left: 40px;"></div>
       </div>
-      <div id="profile-info"></div>
-      <div class="logout"><a href="./#"><img src="./images/logout.png" alt="Logout" style="width:70px; height:70px"></a> </div>
+
+      <!-- <div class="logout">
+        <a href="./#"><img src="./images/logout.png" alt="Logout"></a>
+      </div> -->
     </div>
   </div>
 
@@ -29,74 +33,62 @@
     document.addEventListener('DOMContentLoaded', () => {
       const profileInfo = document.getElementById('profile-info');
       const profilePic = document.getElementById('profile-pic');
-      const heading = document.getElementById('heading')
+      const heading = document.getElementById('heading');
 
       const urlParams = new URLSearchParams(window.location.search); 
-      const userEmail = urlParams.get('email');
       const userId = urlParams.get('userId');
+
       fetch(`/api/user/profile/${userId}`)
         .then(response => {
-	        if (!response.ok) {
+          if (!response.ok) {
             throw new Error('Failed to fetch user profile');
           }
           return response.json();
         })
         .then(data => {
-        console.log(data)
-        const user = data.user;
-        profileInfo.innerHTML = `
-            <p><strong>Username:</strong> ${user.username}</p>
-	          <p><strong>Email:</strong> ${user.email}</p>
-            <p><strong>Course:</strong> ${user.course}</p>
-            <p><strong>Cohort:</strong> ${user.cohort}</p>
-            <p><strong>Country:</strong> ${user.location.country}</p>
-            <p><strong>Region:</strong> ${user.location.region}</p>
-            <p><strong>Town:</strong> ${user.location.town}</p> `;
-        if (data.user.imagePath) {
-            profilePic.src = data.user.imagePath;
-          } else {
-            profilePic.src = './default_p.svg';
-          }
-          heading.textContent = `${data.user.username}'s Profile`;
-        
+          const user = data.user;
+          heading.textContent = `Your Profile`;
+          profileInfo.innerHTML = `
+            <div class="info-grid">
+              <p><strong>Username:</strong> ${user.username}</p>
+              <p><strong>Email:</strong> ${user.email}</p>
+              <p><strong>Course:</strong> ${user.course}</p>
+              <p><strong>Cohort:</strong> ${user.cohort}</p>
+              <p><strong>Country:</strong> ${user.location.country}</p>
+              <p><strong>Region:</strong> ${user.location.region}</p>
+              <p><strong>Town:</strong> ${user.location.town}</p>
+            </div>
+          `;
+          profilePic.src = user.imagePath || './default_p.svg';
         })
         .catch(error => {
           console.error('Error fetching user profile:', error.message);
           profileInfo.innerHTML = '<p>Error fetching user profile</p>';
         });
-        
     });
 
-    //handling image upload
-   
+    // Handling Image Upload
     document.getElementById("uploadForm").addEventListener('submit', async (event) => {
-      event.preventDefault()
-
-      const formData = new FormData()
-
-      formData.append('image', document.getElementById('image-input').files[0])
+      event.preventDefault();
+      const formData = new FormData();
+      formData.append('image', document.getElementById('image-input').files[0]);
 
       try {
         const response = await fetch('/api/upload', {
           method: 'POST',
           body: formData
-        })
+        });
 
         if (!response.ok) {
-          throw new Error('Failed to upload image')
+          throw new Error('Failed to upload image');
         }
 
-        const data = await response.json()
-        if (!data) {
-          document.getElementById('message').textContent = 'iresh the page to see changes'
-
-        }
-        document.getElementById('message').textContent = 'image uploaded successfully, Refresh the page to see changes'
-      }catch(error) {
-        console.error('Error uploading image:', error.message)
-        document.getElementById('message').textContent = 'Error uploading image'
+        document.getElementById('message').textContent = 'Image uploaded successfully! Refresh the page to see changes.';
+      } catch (error) {
+        console.error('Error uploading image:', error.message);
+        document.getElementById('message').textContent = 'Error uploading image';
       }
-    })
+    });
   </script>
 </body>
 </html>
