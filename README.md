@@ -10,7 +10,9 @@ Welcome to GeoChat, a web platform designed to connect online ALX students based
 
 ALX(african Leadership X) is an online bootcamp for students from all over africa. At ALX, many students pursue online courses without ever knowing that there are others nearby Students who share similar interests or study materials. GeoChat aims to bridge this gap by providing a platform where online ALX students can discover and connect with others living in their vicinity.
 
-![Homepage](./uploads/Screenshot%20from%202024-04-03%2020-56-59.png)
+![Homepage](./uploads/Screenshot%20from%202025-03-10%2020-33-56.png)
+![d](./uploads/Screenshot%20from%202025-03-10%2020-34-10.png)
+![d](./uploads/Screenshot%20from%202025-03-10%2020-58-25.png)
 
 ## Technologies
 Backend - nodejs, express
